@@ -1,0 +1,116 @@
+---
+const modules = [
+  {
+    num: '01',
+    name: 'ABR | RoadStyle',
+    desc: 'Управление стилями отображения дорог, поверхностей и слоёв проекта из единого интерфейса.',
+    platform: 'Topomatic Robur',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c-4 4-4 16 0 20M12 2c4 4 4 16 0 20"/></svg>`,
+    href: '#downloads',
+  },
+  {
+    num: '02',
+    name: 'ABR | Profile Tracker',
+    desc: 'Пикетаж, отметки, рабочие высоты и уклоны в реальном времени при работе с продольным профилем.',
+    platform: 'Topomatic Robur',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    href: '#downloads',
+  },
+  {
+    num: '03',
+    name: 'ABR | Model Manager',
+    desc: 'Быстрое переключение между поверхностями, коридорами и другими объектами без лишних кликов.',
+    platform: 'Topomatic Robur',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
+    href: '#downloads',
+  },
+  {
+    num: '04',
+    name: 'ABR | Slab Designer',
+    desc: 'Автоматическая раскладка бетонных плит: расчёт и генерация схем покрытия по параметрам.',
+    platform: 'Autodesk Civil 3D',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>`,
+    href: '#downloads',
+  },
+  {
+    num: '05',
+    name: 'ABR | Width Import',
+    desc: 'Импорт параметров поперечного профиля из внешних источников и сторонних моделей.',
+    platform: 'Robur / Civil 3D',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+    href: '#downloads',
+  },
+];
+---
+
+<section id="solutions" class="bg-base border-b border-line">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+
+    <!-- Section header -->
+    <div class="reveal flex items-center gap-5 mb-4">
+      <span class="section-label">Модули ABR</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="reveal reveal-delay-1 flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white leading-snug">
+        Полные инструменты<br/>для работы в Robur
+      </h2>
+      <p class="text-gray-2 text-sm font-mono max-w-sm leading-relaxed">
+        Каждый модуль решает конкретную задачу.<br/>
+        Бесплатно. Без регистрации.
+      </p>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line">
+      {modules.map((mod, i) => (
+        <a
+          href={mod.href}
+          class:list={[
+            'group bg-base p-7 flex flex-col gap-5 card-hover cursor-pointer',
+            i >= 3 && modules.length === 5 ? 'sm:col-span-1' : '',
+          ]}
+        >
+          <!-- Number + platform -->
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] tracking-widest2 text-gray-3 uppercase">{mod.platform}</span>
+            <span class="font-mono text-xs text-gray-4">{mod.num}</span>
+          </div>
+
+          <!-- Icon -->
+          <div class="text-gray-3 group-hover:text-accent transition-colors duration-200">
+            <Fragment set:html={mod.icon} />
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1 flex flex-col gap-2">
+            <h3 class="font-bold text-white text-sm group-hover:text-gray-1 transition-colors">{mod.name}</h3>
+            <p class="text-xs text-gray-2 leading-relaxed">{mod.desc}</p>
+          </div>
+
+          <!-- Footer -->
+          <div class="flex items-center justify-between pt-3 border-t border-line">
+            <span class="font-mono text-[10px] text-gray-4 group-hover:text-gray-3 transition-colors">Подробнее</span>
+            <svg class="text-gray-4 group-hover:text-accent transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </a>
+      ))}
+
+      <!-- Sixth cell: CTA card -->
+      <div class="reveal bg-surface/60 p-7 flex flex-col justify-between gap-5 border border-line">
+        <div>
+          <span class="font-mono text-[10px] tracking-widest2 text-gray-3 uppercase">Все бесплатно</span>
+          <p class="mt-4 text-sm text-gray-2 leading-relaxed">
+            Все модули доступны для скачивания без оплаты и регистрации.
+          </p>
+        </div>
+        <a href="#downloads" class="btn-white self-start">
+          Перейти к загрузкам
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

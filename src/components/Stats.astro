@@ -1,0 +1,53 @@
+---
+const stats = [
+  { value: '10+', unit: 'лет', label: 'Опыт проектирования' },
+  { value: '50+', unit: 'объектов', label: 'Реализованных проектов' },
+  { value: '5', unit: 'модулей', label: 'Собственных разработок' },
+  { value: '∞', unit: '', label: 'Поддержка и обновления' },
+];
+---
+
+<section id="expert" class="border-b border-line bg-base">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+
+    <!-- Section header -->
+    <div class="flex items-center gap-6 mb-12">
+      <span class="section-label">00 — Статус</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+      <!-- Robur Expert card -->
+      <div class="border border-line p-8 relative">
+        <!-- Corner accent -->
+        <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-white -translate-x-px -translate-y-px"></div>
+        <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-white translate-x-px translate-y-px"></div>
+
+        <div class="flex items-start gap-5">
+          <img src="/logo-mark.svg" alt="" class="w-14 h-14 shrink-0" />
+          <div>
+            <div class="font-mono text-xs tracking-widest2 uppercase text-gray-3 mb-2">Сертифицированный эксперт</div>
+            <h3 class="text-xl font-bold text-white mb-3">Robur Expert</h3>
+            <p class="text-sm text-gray-2 leading-relaxed font-mono">
+              Подтверждённая экспертиза и практический опыт работы с Topomatic Robur на реальных объектах дорожного проектирования.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="grid grid-cols-2 gap-px bg-line">
+        {stats.map((s) => (
+          <div class="bg-base p-6 flex flex-col gap-1">
+            <div class="flex items-baseline gap-2">
+              <span class="font-mono font-bold text-white" style="font-size: 2.5rem; line-height:1;">{s.value}</span>
+              {s.unit && <span class="font-mono text-sm text-gray-3">{s.unit}</span>}
+            </div>
+            <span class="font-mono text-xs text-gray-3 mt-1">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

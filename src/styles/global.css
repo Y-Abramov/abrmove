@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #09090E;
+    color: #E2E4EF;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(34, 211, 238, 0.2);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #09090E; }
+  ::-webkit-scrollbar-thumb { background: #1C1F2E; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #282D45; }
+}
+
+@layer utilities {
+  .section-label {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #42466A;
+    white-space: nowrap;
+  }
+
+  .section-rule {
+    width: 100%;
+    height: 1px;
+    background-color: #1C1F2E;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+  .reveal-delay-4 { transition-delay: 0.32s; }
+  .reveal-delay-5 { transition-delay: 0.40s; }
+
+  /* Fade only variant */
+  .reveal-fade {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .reveal-fade.visible {
+    opacity: 1;
+  }
+
+  /* Accent glow on hover */
+  .glow-hover:hover {
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.3), 0 0 20px rgba(34,211,238,0.06);
+  }
+
+  /* Card accent border on hover */
+  .card-hover {
+    transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+  }
+  .card-hover:hover {
+    border-color: #282D45;
+    background-color: #10121A;
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.1), 0 8px 32px rgba(0,0,0,0.4);
+  }
+}
+
+/* Accent CTA button */
+@layer components {
+  .btn-accent {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-base text-xs font-mono tracking-widest2 uppercase font-medium cursor-pointer;
+    color: #09090E;
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+  }
+  .btn-accent:hover {
+    background-color: #67E8F9;
+    box-shadow: 0 0 20px rgba(34,211,238,0.25);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-line-light text-gray-2 text-xs font-mono tracking-widest2 uppercase cursor-pointer;
+    transition: border-color 180ms ease, color 180ms ease;
+  }
+  .btn-outline:hover {
+    border-color: #888BA8;
+    color: #E2E4EF;
+  }
+
+  .support-btn:hover .heart-icon {
+    fill: #E53E6D;
+    stroke: #E53E6D;
+    filter: drop-shadow(0 0 8px rgba(229, 62, 109, 0.5));
+  }
+
+  .btn-white {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-white text-xs font-mono tracking-widest2 uppercase font-medium cursor-pointer;
+    color: #09090E;
+    transition: background-color 180ms ease;
+  }
+  .btn-white:hover {
+    background-color: #E2E4EF;
+  }
+}

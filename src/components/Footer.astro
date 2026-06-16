@@ -1,0 +1,76 @@
+---
+const nav = [
+  { label: 'Главная', href: '#hero' },
+  { label: 'Модули', href: '#solutions' },
+  { label: 'Блог', href: '#blog' },
+  { label: 'Документация', href: '#downloads' },
+  { label: 'Обо мне', href: '#about' },
+];
+
+const social = [
+  { label: 'Telegram', href: 'https://t.me/yabramove' },
+  { label: 'GitHub', href: 'https://github.com/' },
+  { label: 'VK', href: 'https://vk.com/' },
+  { label: 'Email', href: 'mailto:yaroslav@abr-move.ru' },
+];
+---
+
+<footer id="footer" class="border-t border-line bg-base">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+    <!-- Top block -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-b border-line divide-y md:divide-y-0 md:divide-x divide-line">
+
+      <!-- Brand -->
+      <div class="py-10 md:pr-10 flex flex-col gap-5">
+        <div class="flex items-center gap-2.5">
+          <img src="/logo-mark.svg" alt="ABR MOVE" class="w-8 h-8" />
+          <div class="flex flex-col leading-none">
+            <span class="font-bold text-sm tracking-widest2 uppercase text-white">ABR</span>
+            <span class="font-mono text-[9px] tracking-widest3 uppercase text-gray-3 -mt-0.5">MOVE</span>
+          </div>
+        </div>
+        <p class="font-mono text-xs text-gray-3 leading-relaxed">
+          Инструменты для проектирования<br/>
+          автомобильных дорог.
+        </p>
+        <div class="inline-flex items-center gap-1.5 border border-accent-dim bg-accent-glow px-2.5 py-1 w-fit">
+          <span class="w-1 h-1 rounded-full bg-accent"></span>
+          <span class="font-mono text-[9px] tracking-widest2 uppercase text-accent">Robur Expert</span>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="py-10 md:px-10 flex flex-col gap-3">
+        <span class="section-label mb-2">Навигация</span>
+        {nav.map((l) => (
+          <a href={l.href} class="font-mono text-xs text-gray-3 hover:text-white transition-colors cursor-pointer w-fit">
+            {l.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Social -->
+      <div class="py-10 md:pl-10 flex flex-col gap-3">
+        <span class="section-label mb-2">Контакты</span>
+        {social.map((s) => (
+          <a
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-mono text-xs text-gray-3 hover:text-white transition-colors cursor-pointer w-fit flex items-center gap-2 group"
+          >
+            <span class="w-1 h-1 bg-gray-4 group-hover:bg-accent transition-colors rounded-full"></span>
+            {s.label}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="font-mono text-[10px] text-gray-4">© {new Date().getFullYear()} ABR | MOVE, Ярослав Абрамов</p>
+      <p class="font-mono text-[10px] text-gray-4">v1.0.0</p>
+    </div>
+  </div>
+</footer>

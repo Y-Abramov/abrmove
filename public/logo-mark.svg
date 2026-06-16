@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="47" stroke="white" stroke-width="2"/>
+  <!-- Inner ring -->
+  <circle cx="50" cy="50" r="41" stroke="white" stroke-width="1.2"/>
+  <!-- Triangle body (filled) -->
+  <path d="M50 9 L91 83 L9 83 Z" fill="#080808" stroke="white" stroke-width="2.2" stroke-linejoin="miter"/>
+  <!-- Road left edge (perspective) -->
+  <path d="M50 14 L22 82" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Road right edge (perspective) -->
+  <path d="M50 14 L78 82" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Road center dashes -->
+  <path d="M50 18 L50 80" stroke="white" stroke-width="1.4" stroke-dasharray="5.5 4" stroke-linecap="round"/>
+</svg>

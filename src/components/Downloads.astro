@@ -1,0 +1,76 @@
+---
+const modules = [
+  { name: 'ABR | RoadStyle',       version: '1.4.2', date: '2025-06-01', platform: 'Topomatic Robur',    size: '2.1 MB', slug: 'abr-roadstyle' },
+  { name: 'ABR | Profile Tracker', version: '2.3.1', date: '2025-05-20', platform: 'Topomatic Robur',    size: '1.8 MB', slug: 'abr-profile-tracker' },
+  { name: 'ABR | Model Manager',   version: '1.1.0', date: '2025-04-10', platform: 'Topomatic Robur',    size: '3.4 MB', slug: 'abr-model-manager' },
+  { name: 'ABR | Slab Designer',   version: '1.0.3', date: '2025-03-15', platform: 'Autodesk Civil 3D',  size: '4.2 MB', slug: 'abr-slab-designer' },
+  { name: 'ABR | Width Import',    version: '1.2.0', date: '2025-02-28', platform: 'Robur / Civil 3D',   size: '1.2 MB', slug: 'abr-width-import' },
+];
+
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+---
+
+<section id="downloads" class="bg-surface/20 border-b border-line">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+
+    <!-- Section header -->
+    <div class="reveal flex items-center gap-5 mb-4">
+      <span class="section-label">Загрузки</span>
+      <div class="section-rule"></div>
+      <span class="font-mono text-[10px] tracking-widest2 text-accent uppercase shrink-0">Бесплатно</span>
+    </div>
+
+    <div class="reveal reveal-delay-1 mb-10">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">Скачать модули</h2>
+    </div>
+
+    <!-- Table -->
+    <div class="reveal reveal-delay-2 border border-line">
+      <!-- Head -->
+      <div class="grid grid-cols-12 gap-4 px-5 py-3 border-b border-line bg-surface/60">
+        <span class="col-span-5 section-label">Модуль</span>
+        <span class="col-span-2 section-label">Версия</span>
+        <span class="col-span-3 section-label hidden sm:block">Платформа</span>
+        <span class="col-span-2 section-label text-right">Скачать</span>
+      </div>
+
+      {modules.map((mod, i) => (
+        <div class:list={[
+          'group grid grid-cols-12 gap-4 px-5 py-4 items-center hover:bg-surface/40 transition-colors duration-100',
+          i < modules.length - 1 ? 'border-b border-line' : '',
+        ]}>
+          <div class="col-span-5 flex flex-col gap-0.5">
+            <span class="text-sm text-white font-medium group-hover:text-gray-1 transition-colors">{mod.name}</span>
+            <span class="font-mono text-[10px] text-gray-4">{formatDate(mod.date)} · {mod.size}</span>
+          </div>
+          <div class="col-span-2">
+            <span class="font-mono text-[10px] text-gray-3 border border-line px-2 py-0.5">v{mod.version}</span>
+          </div>
+          <div class="col-span-3 hidden sm:block font-mono text-[11px] text-gray-3">{mod.platform}</div>
+          <div class="col-span-2 flex justify-end">
+            <a
+              href={`/downloads/${mod.slug}`}
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line text-gray-3 text-[10px] font-mono tracking-widest2 uppercase hover:border-accent hover:text-accent hover:bg-accent-glow transition-all duration-150 cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              .zip
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Notes -->
+    <div class="reveal reveal-delay-3 mt-5 flex flex-wrap gap-4 font-mono text-[10px] text-gray-4">
+      <span>Windows 10 / 11 · .NET 4.8+</span>
+      <span class="text-line-light">·</span>
+      <a href="https://github.com/" class="hover:text-gray-2 transition-colors cursor-pointer">История изменений на GitHub →</a>
+    </div>
+  </div>
+</section>

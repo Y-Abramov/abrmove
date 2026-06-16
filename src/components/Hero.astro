@@ -1,0 +1,99 @@
+---
+---
+
+<section id="hero" class="relative min-h-screen flex flex-col justify-center overflow-hidden bg-base pt-14">
+
+  <!-- Fine grid background -->
+  <div class="absolute inset-0 bg-grid-fine bg-grid-48 pointer-events-none opacity-100"></div>
+
+  <!-- Accent glow — top center -->
+  <div class="absolute inset-0 bg-glow-center pointer-events-none"></div>
+
+  <!-- Road SVG — right side decorative -->
+  <div class="absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none select-none overflow-hidden opacity-[0.07]">
+    <svg viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute right-0 top-1/2 -translate-y-1/2 w-full h-full">
+      <path d="M300 0 L80 800" stroke="white" stroke-width="2.5"/>
+      <path d="M300 0 L520 800" stroke="white" stroke-width="2.5"/>
+      <path d="M300 0 L300 800" stroke="white" stroke-width="1.5" stroke-dasharray="18 12"/>
+      <path d="M300 0 L160 800" stroke="white" stroke-width="1" opacity="0.5"/>
+      <path d="M300 0 L440 800" stroke="white" stroke-width="1" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Giant watermark logo -->
+  <div class="absolute inset-0 flex items-center justify-end pr-12 pointer-events-none select-none">
+    <img src="/logo-mark.svg" alt="" class="w-[480px] h-[480px] opacity-[0.025]" aria-hidden="true" />
+  </div>
+
+  <!-- Content -->
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8 w-full py-24 lg:py-32">
+
+    <!-- Tag -->
+    <div class="reveal flex items-center gap-3 mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 border border-accent-dim bg-accent-glow font-mono text-[10px] tracking-widest2 uppercase text-accent">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+        Topomatic Robur · Civil 3D
+      </span>
+    </div>
+
+    <!-- Headline -->
+    <div class="mb-8">
+      <h1 class="reveal reveal-delay-1 font-bold text-white leading-[1.05] tracking-tight"
+          style="font-size: clamp(2.4rem, 5.5vw, 5rem);">
+        Инструменты<br/>
+        для проектирования<br/>
+        <span class="text-gray-3">дорог в Topomatic<br/>Robur</span>
+      </h1>
+    </div>
+
+    <!-- Subtitle -->
+    <p class="reveal reveal-delay-2 text-gray-2 text-sm leading-relaxed max-w-lg mb-10 font-mono">
+      Плагины и скрипты, которые ускоряют работу и&nbsp;экономят время инженера.
+      Созданы практикующим проектировщиком.
+    </p>
+
+    <!-- CTAs -->
+    <div class="reveal reveal-delay-3 flex flex-wrap items-center gap-3 mb-16">
+      <a href="#downloads" class="btn-accent">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Скачать модули
+      </a>
+      <a href="#solutions" class="btn-outline">
+        Подробнее
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="reveal reveal-delay-4 border-t border-line pt-8 grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-line">
+      {[
+        { v: '10+', l: 'лет опыта' },
+        { v: '5', l: 'модулей' },
+        { v: '50+', l: 'проектов' },
+        { v: 'Free', l: 'для скачивания' },
+      ].map((s) => (
+        <div class="px-6 first:pl-0 flex flex-col gap-0.5">
+          <span class="font-mono font-bold text-white text-xl">{s.v}</span>
+          <span class="font-mono text-[11px] text-gray-3">{s.l}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Bottom platforms strip -->
+  <div class="relative border-t border-line bg-surface/40">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center gap-0 divide-x divide-line overflow-x-auto">
+        {['Topomatic Robur', 'Autodesk Civil 3D', 'BIM', 'Dynamo', '.NET / C#'].map((p) => (
+          <span class="px-6 py-3 font-mono text-[11px] text-gray-3 whitespace-nowrap shrink-0">{p}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
