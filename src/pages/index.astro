@@ -15,53 +15,29 @@ try {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
-  const reposRes = await fetch(
-    'https://api.github.com/users/Y-Abramov/repos?per_page=100&sort=updated',
+  const res = await fetch(
+    'https://api.github.com/repos/Y-Abramov/robur-modules/releases?per_page=100',
     { headers: { Accept: 'application/vnd.github+json' }, signal: controller.signal }
   ).finally(() => clearTimeout(timeout));
 
-  if (reposRes.ok) {
-    const repos = (await reposRes.json()) as any[];
-    const publicRepos = repos.filter((r: any) => !r.private && !r.fork);
+  if (res.ok) {
+    const releases = (await res.json()) as any[];
 
-    const results = await Promise.allSettled(
-      publicRepos.map(async (repo: any): Promise<Module | null> => {
-        try {
-          const relCtrl = new AbortController();
-          const relTimeout = setTimeout(() => relCtrl.abort(), 5000);
-
-          const relRes = await fetch(
-            `https://api.github.com/repos/Y-Abramov/${repo.name}/releases/latest`,
-            { headers: { Accept: 'application/vnd.github+json' }, signal: relCtrl.signal }
-          ).finally(() => clearTimeout(relTimeout));
-
-          if (!relRes.ok) return null;
-          const release = (await relRes.json()) as any;
-          if (!release.tag_name) return null;
-
-          const asset = (release.assets as any[])?.find((a: any) =>
-            /\.(zip|exe|dll|msi)$/i.test(a.name)
-          );
-
-          return {
-            name: repo.name,
-            description: repo.description ?? null,
-            version: release.tag_name,
-            downloadUrl: asset?.browser_download_url ?? release.html_url,
-            releaseUrl: release.html_url,
-          };
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    modules = results
-      .filter(
-        (r): r is PromiseFulfilledResult<Module> =>
-          r.status === 'fulfilled' && r.value !== null
-      )
-      .map((r) => r.value as Module);
+    modules = releases
+      .filter((r: any) => r.tag_name && !r.draft && !r.prerelease)
+      .map((r: any): Module => {
+        const asset = (r.assets as any[])?.find((a: any) =>
+          /\.(zip|exe|dll|msi|tpm)$/i.test(a.name)
+        );
+        const version = r.tag_name.match(/v[\d.]+$/)?.[0] ?? r.tag_name;
+        return {
+          name: r.name || r.tag_name,
+          description: r.body?.trim() || null,
+          version,
+          downloadUrl: asset?.browser_download_url ?? r.html_url,
+          releaseUrl: r.html_url,
+        };
+      });
   }
 } catch {
   // GitHub API недоступен или превышен таймаут — секция не отображается
