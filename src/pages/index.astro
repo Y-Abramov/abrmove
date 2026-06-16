@@ -24,7 +24,7 @@ try {
     const releases = (await res.json()) as any[];
 
     modules = releases
-      .filter((r: any) => r.tag_name && !r.draft && !r.prerelease)
+      .filter((r: any) => r.tag_name && !r.draft)
       .map((r: any): Module => {
         const asset = (r.assets as any[])?.find((a: any) =>
           /\.(zip|exe|dll|msi|tpm)$/i.test(a.name)
