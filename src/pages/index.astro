@@ -6,7 +6,6 @@ interface Module {
   description: string | null;
   version: string;
   downloadUrl: string;
-  releaseUrl: string;
 }
 
 let modules: Module[] = [];
@@ -16,31 +15,22 @@ try {
   const timeout = setTimeout(() => controller.abort(), 8000);
 
   const res = await fetch(
-    'https://api.github.com/repos/Y-Abramov/robur-modules/releases?per_page=100',
-    { headers: { Accept: 'application/vnd.github+json' }, signal: controller.signal }
+    'https://raw.githubusercontent.com/Y-Abramov/robur-modules/main/catalog.json',
+    { signal: controller.signal }
   ).finally(() => clearTimeout(timeout));
 
   if (res.ok) {
-    const releases = (await res.json()) as any[];
+    const catalog = (await res.json()) as any[];
 
-    modules = releases
-      .filter((r: any) => r.tag_name && !r.draft)
-      .map((r: any): Module => {
-        const asset = (r.assets as any[])?.find((a: any) =>
-          /\.(zip|exe|dll|msi|tpm)$/i.test(a.name)
-        );
-        const version = r.tag_name.match(/v[\d.]+$/)?.[0] ?? r.tag_name;
-        return {
-          name: r.name || r.tag_name,
-          description: r.body?.trim() || null,
-          version,
-          downloadUrl: asset?.browser_download_url ?? r.html_url,
-          releaseUrl: r.html_url,
-        };
-      });
+    modules = catalog.map((m: any): Module => ({
+      name: m.title,
+      description: m.description || null,
+      version: `v${m.version}`,
+      downloadUrl: m.tpm_url,
+    }));
   }
 } catch {
-  // GitHub API недоступен или превышен таймаут — секция не отображается
+  // catalog.json недоступен или превышен таймаут — секция не отображается
 }
 ---
 
