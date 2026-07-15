@@ -109,9 +109,15 @@ a:hover{border-bottom-color:var(--cyan)}
 .navlinks::-webkit-scrollbar{display:none}
 .navlinks a{
   font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--muted);border:0;white-space:nowrap
+  text-transform:uppercase;color:var(--muted);border:0;white-space:nowrap;
+  text-decoration:none;text-underline-offset:6px;text-decoration-thickness:2px;
+  transition:color .18s ease
 }
 .navlinks a:hover{color:var(--ink)}
+.navlinks a.active{
+  color:var(--cyan);
+  text-decoration:underline;text-decoration-color:var(--cyan)
+}
 .theme-toggle{
   display:flex;align-items:center;justify-content:center;flex:0 0 auto;
   width:30px;height:30px;border-radius:7px;padding:0;
@@ -171,7 +177,7 @@ h1 .arrow{color:var(--violet)}
 .axis-legend i{display:inline-block;width:10px;height:2px;margin-right:7px;vertical-align:middle}
 
 /* ---------- sections ---------- */
-section{padding:64px 0;border-bottom:1px solid var(--line-solid)}
+section{padding:64px 0;border-bottom:1px solid var(--line-solid);scroll-margin-top:72px}
 .shead{display:flex;align-items:flex-start;gap:18px;margin-bottom:8px}
 .snum{
   font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--cyan);
@@ -1307,6 +1313,62 @@ footer .back:hover{color:var(--cyan)}
     apply(next);
     try{ localStorage.setItem('sp42-theme', next); }catch(e){}
   });
+})();
+</script>
+
+<script>
+(function(){
+  var nav = document.querySelector('.navlinks');
+  if (!nav) return;
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+  var HEADER = 72;                       // sticky topbar clearance
+  var pairs = links.map(function(a){
+    var el = document.getElementById(a.getAttribute('href').slice(1));
+    return el ? { link: a, section: el } : null;
+  }).filter(Boolean);
+  if (!pairs.length) return;
+
+  var activeId = null;
+
+  function setActive(id){
+    if (id === activeId) return;
+    activeId = id;
+    pairs.forEach(function(p){
+      var on = p.section.id === id;
+      p.link.classList.toggle('active', on);
+      if (on) p.link.setAttribute('aria-current', 'true');
+      else p.link.removeAttribute('aria-current');
+      // keep the active item visible in the horizontally-scrollable nav
+      if (on && nav.scrollWidth > nav.clientWidth){
+        var target = p.link.offsetLeft - nav.clientWidth / 2 + p.link.clientWidth / 2;
+        nav.scrollTo({ left: target, behavior: 'smooth' });
+      }
+    });
+  }
+
+  function update(){
+    var trigger = HEADER + 40;
+    var current = null;
+    for (var i = 0; i < pairs.length; i++){
+      if (pairs[i].section.getBoundingClientRect().top <= trigger) current = pairs[i];
+    }
+    // near the very bottom, force the last section active
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4){
+      current = pairs[pairs.length - 1];
+    }
+    setActive(current ? current.section.id : null);
+  }
+
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){ update(); ticking = false; });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
 })();
 </script>
 
