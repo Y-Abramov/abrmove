@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#09090E">
+<title>СП 42.13330 — 2016 → 2026. Разбор изменений</title>
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('sp42-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090E;
+  --panel:#10121A;
+  --panel-2:#181B27;
+  --line:#1C1F2E70;
+  --line-solid:#1C1F2E;
+  --line-light:#282D45;
+  --ink:#E2E4EF;
+  --muted:#888BA8;
+  --muted-dim:#42466A;
+  --cyan:#22D3EE;
+  --accent-dim:#0C4A56;
+  --amber:#F5A524;
+  --emerald:#34D399;
+  --rose:#FB5E7E;
+  --violet:#A78BFA;
+  --text-1:#EAECF5;
+  --text-2:#C6CBDA;
+  --text-3:#5A5F76;
+  --neutral-4:#4a5068;
+  --wash-1:#ffffff05;
+  --wash-2:#ffffff04;
+  --topbar-bg:#09090ecc;
+  --glow-1:#22d3ee14;
+  --glow-2:#a78bfa0f;
+  --maxw:1180px;
+}
+:root[data-theme="light"]{
+  --bg:#F6F7FB;
+  --panel:#FFFFFF;
+  --panel-2:#EEF0F6;
+  --line:#141B3308;
+  --line-solid:#E1E4EE;
+  --line-light:#CBD0E0;
+  --ink:#14161F;
+  --muted:#5B5F78;
+  --muted-dim:#8A8FA6;
+  --cyan:#0C8599;
+  --accent-dim:#CFF3F8;
+  --amber:#A9660A;
+  --emerald:#0E8F63;
+  --rose:#C81E4A;
+  --violet:#6D4FC4;
+  --text-1:#1B1E29;
+  --text-2:#4B4F63;
+  --text-3:#A6AABF;
+  --neutral-4:#C3C7D6;
+  --wash-1:#0f172a09;
+  --wash-2:#0f172a07;
+  --topbar-bg:#f6f7fbd9;
+  --glow-1:#0c85990d;
+  --glow-2:#6d4fc409;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif;
+  font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(900px 500px at 12% -8%, var(--glow-1), transparent 60%),
+    radial-gradient(760px 460px at 92% 4%, var(--glow-2), transparent 62%);
+  background-attachment:fixed;
+  transition:background-color .25s ease,color .25s ease;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.topbar,.card,.rail,.rail-row,.tblwrap,table,.stat,.check,.note,.verdict,footer,section,thead th,tbody td{
+  transition:background-color .25s ease,border-color .25s ease,color .25s ease
+}
+a{color:var(--cyan);text-decoration:none;border-bottom:1px solid #22d3ee40}
+a:hover{border-bottom-color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(14px);background:var(--topbar-bg);
+  border-bottom:1px solid var(--line-solid);
+}
+.topbar .wrap{display:flex;align-items:center;gap:20px;height:56px}
+.brand{display:flex;align-items:center;white-space:nowrap;border:0}
+.brand img{height:22px;width:auto;display:block}
+.brand img.for-light{display:none}
+:root[data-theme="light"] .brand img.for-dark{display:none}
+:root[data-theme="light"] .brand img.for-light{display:block}
+.navlinks{display:flex;gap:18px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);border:0;white-space:nowrap
+}
+.navlinks a:hover{color:var(--ink)}
+.theme-toggle{
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  width:30px;height:30px;border-radius:7px;padding:0;
+  border:1px solid var(--line-solid);background:var(--panel);color:var(--muted);cursor:pointer;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease
+}
+.theme-toggle:hover{color:var(--cyan);border-color:var(--line-light)}
+.theme-toggle svg{width:15px;height:15px;display:none}
+:root[data-theme="dark"] .theme-toggle .icon-moon{display:block}
+:root[data-theme="light"] .theme-toggle .icon-sun{display:block}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 56px;border-bottom:1px solid var(--line-solid)}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:20px
+}
+.eyebrow b{color:var(--cyan);font-weight:600}
+h1{
+  font-family:"Inter",sans-serif;font-weight:800;
+  font-size:clamp(30px,5.4vw,60px);line-height:1.04;letter-spacing:-.03em;margin:0 0 22px
+}
+h1 .old{color:var(--text-3)}
+h1 .arrow{color:var(--violet)}
+.lede{font-size:clamp(16px,1.5vw,19px);color:var(--text-2);max-width:70ch;margin:0 0 12px}
+.lede b{color:var(--ink);font-weight:600}
+
+/* axis graphic */
+.axes{margin:44px 0 8px}
+.axis{margin-bottom:26px}
+.axis-head{
+  display:flex;align-items:baseline;gap:12px;margin-bottom:10px;
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+}
+.axis-head .code{color:var(--ink);font-weight:600}
+.axis-head .note{color:var(--muted);letter-spacing:.04em;text-transform:none;font-size:12px}
+.strip{display:flex;gap:3px;height:auto}
+.seg{
+  flex:1 1 0;min-width:0;padding:9px 8px 8px;border-radius:3px;
+  font-family:"JetBrains Mono",monospace;font-size:9.5px;line-height:1.25;
+  letter-spacing:.02em;text-transform:uppercase;
+  border-top:2px solid;overflow:hidden;
+}
+.axis-old .seg{background:#f5a5240f;border-top-color:#f5a52466;color:#A98A55}
+.axis-new .seg{background:#22d3ee12;border-top-color:#22d3ee80;color:#7FC9D8}
+.axis-new .seg.is-new{background:#34d39918;border-top-color:var(--emerald);color:#8BE0BE}
+.axis-old .seg.is-gone{background:#fb5e7e12;border-top-color:var(--rose);color:#D18494}
+:root[data-theme="light"] .axis-old .seg{background:#a9660a0d;border-top-color:#c07f16;color:#8a5c0f}
+:root[data-theme="light"] .axis-new .seg{background:#0c85990d;border-top-color:#0c8599;color:#0a6b7a}
+:root[data-theme="light"] .axis-new .seg.is-new{background:#0e8f6314;border-top-color:var(--emerald);color:#0b6e4c}
+:root[data-theme="light"] .axis-old .seg.is-gone{background:#c81e4a14;border-top-color:var(--rose);color:#a2173c}
+.seg em{display:block;font-style:normal;opacity:.55;font-size:9px}
+.axis-legend{
+  display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:18px;
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em
+}
+.axis-legend i{display:inline-block;width:10px;height:2px;margin-right:7px;vertical-align:middle}
+
+/* ---------- sections ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line-solid)}
+.shead{display:flex;align-items:flex-start;gap:18px;margin-bottom:8px}
+.snum{
+  font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--cyan);
+  padding-top:9px;letter-spacing:.1em;flex:0 0 auto
+}
+h2{
+  font-family:"Inter",sans-serif;font-weight:700;font-size:clamp(21px,2.6vw,30px);
+  letter-spacing:-.015em;margin:0;line-height:1.2
+}
+.sub{color:var(--muted);max-width:78ch;margin:14px 0 34px;font-size:15.5px}
+h3{
+  font-family:"Inter",sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:0;margin:44px 0 16px;color:var(--ink)
+}
+h3::before{content:"— ";color:var(--violet)}
+p{margin:0 0 14px}
+
+/* ---------- diff cards ---------- */
+.diff{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 26px}
+.card{
+  background:var(--panel);border:1px solid var(--line-solid);border-radius:10px;
+  padding:20px 20px 18px;position:relative;overflow:hidden
+}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:2px}
+.card.was::before{background:var(--amber)}
+.card.now::before{background:var(--cyan)}
+.card .tag{
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:12px;display:block
+}
+.card.was .tag{color:var(--amber)}
+.card.now .tag{color:var(--cyan)}
+.card p{font-size:14.5px;margin:0 0 10px;color:var(--text-2)}
+.card p:last-child{margin-bottom:0}
+.card ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--text-2)}
+.card li{margin-bottom:7px}
+.card li:last-child{margin-bottom:0}
+.ref{
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--muted);
+  display:block;margin-top:14px;letter-spacing:.04em
+}
+.num{font-family:"JetBrains Mono",monospace;font-weight:600}
+.card.was .num{color:var(--amber)}
+.card.now .num{color:var(--cyan)}
+
+/* verdict strip under diff */
+.verdict{
+  display:flex;gap:12px;align-items:flex-start;margin:-8px 0 30px;padding:14px 16px;
+  border:1px dashed var(--line-light);border-radius:8px;background:var(--wash-2);
+  font-size:14px;color:var(--text-2)
+}
+.verdict b{color:var(--ink)}
+.verdict .vk{
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--violet);flex:0 0 auto;padding-top:3px
+}
+
+/* ---------- remap rail ---------- */
+.rail{border:1px solid var(--line-solid);border-radius:12px;background:var(--panel);overflow:hidden}
+.rail-head,.rail-row{display:grid;grid-template-columns:1fr 46px 1.15fr;gap:0}
+.rail-head{
+  background:var(--wash-1);border-bottom:1px solid var(--line-solid);
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase
+}
+.rail-head>div{padding:12px 16px}
+.rail-head .c1{color:var(--amber)}
+.rail-head .c3{color:var(--cyan)}
+.rail-row{border-bottom:1px solid var(--line-solid)}
+.rail-row:last-child{border-bottom:0}
+.rail-row:hover{background:var(--wash-1)}
+.rail-row>div{padding:13px 16px;font-size:14px}
+.rail-row .c1{color:var(--text-2)}
+.rail-row .c3{color:var(--text-1)}
+.rail-row .c2{
+  display:flex;align-items:center;justify-content:center;padding:13px 0;
+  font-family:"JetBrains Mono",monospace;font-size:14px
+}
+.k{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);margin-right:8px}
+.chip{
+  display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;
+  border:1px solid;margin-left:8px;vertical-align:2px;white-space:nowrap
+}
+.chip.new{color:var(--emerald);border-color:#34d39955;background:#34d39912}
+.chip.gone{color:var(--rose);border-color:#fb5e7e55;background:#fb5e7e12}
+.chip.rework{color:var(--violet);border-color:#a78bfa55;background:#a78bfa12}
+.chip.keep{color:var(--muted);border-color:var(--neutral-4);background:var(--wash-1)}
+.rail-row.gone .c2{color:var(--rose)}
+.rail-row.new .c2{color:var(--emerald)}
+.rail-row.rework .c2{color:var(--violet)}
+.rail-row.keep .c2{color:var(--neutral-4)}
+
+/* ---------- data table ---------- */
+.tblwrap{overflow-x:auto;border:1px solid var(--line-solid);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+thead th{
+  background:var(--wash-1);text-align:left;padding:12px 16px;font-weight:600;
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line-solid);
+  white-space:nowrap
+}
+thead th.was{color:var(--amber)}
+thead th.now{color:var(--cyan)}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--line-solid);vertical-align:top;color:var(--text-2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--wash-2)}
+td.p{color:var(--text-1);font-weight:500}
+td.v{font-family:"JetBrains Mono",monospace;white-space:nowrap}
+td.v.was{color:var(--amber)}
+td.v.now{color:var(--cyan)}
+td.d{font-size:13px;color:var(--muted)}
+.up{color:var(--rose)}
+.down{color:var(--emerald)}
+.eq{color:var(--muted)}
+
+/* ---------- stat band ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:34px 0 0}
+.stat{border:1px solid var(--line-solid);border-radius:10px;padding:18px;background:var(--panel)}
+.stat .v{
+  font-family:"Inter",sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,30px);
+  line-height:1;letter-spacing:-.02em
+}
+.stat .v .s{font-size:14px;color:var(--muted);font-weight:400}
+.stat .l{
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-top:10px;line-height:1.5
+}
+.stat.c1 .v{color:var(--cyan)}
+.stat.c2 .v{color:var(--emerald)}
+.stat.c3 .v{color:var(--rose)}
+.stat.c4 .v{color:var(--violet)}
+
+/* ---------- callout ---------- */
+.note{
+  border-left:2px solid var(--amber);background:#f5a5240a;border-radius:0 8px 8px 0;
+  padding:16px 18px;margin:24px 0;font-size:14.5px;color:var(--text-2)
+}
+.note b{color:var(--amber);font-weight:600}
+.note.flag{border-left-color:var(--rose);background:#fb5e7e0a}
+.note.flag b{color:var(--rose)}
+
+/* ---------- checklist ---------- */
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.check{
+  border:1px solid var(--line-solid);border-radius:10px;background:var(--panel);
+  padding:18px 20px
+}
+.check h4{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cyan);margin:0 0 10px;font-weight:600
+}
+.check p{font-size:14px;color:var(--text-2);margin:0}
+.check .why{
+  display:block;margin-top:10px;font-family:"JetBrains Mono",monospace;
+  font-size:10.5px;color:var(--muted)
+}
+
+/* ---------- footer ---------- */
+footer{padding:0;color:var(--muted);font-size:13px;border-top:1px solid var(--line-solid)}
+footer .fl{
+  display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;
+  padding:44px 0 28px
+}
+footer .brandf{display:flex;align-items:center;text-decoration:none;border:0}
+footer .brandf img{height:24px;width:auto;display:block}
+footer .brandf img.for-light{display:none}
+:root[data-theme="light"] footer .brandf img.for-dark{display:none}
+:root[data-theme="light"] footer .brandf img.for-light{display:block}
+footer .bottom{
+  border-top:1px solid var(--line-solid);padding:18px 0;
+  font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted-dim)
+}
+footer .bottom .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer .back{
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);border:0
+}
+footer .back:hover{color:var(--cyan)}
+
+@media (max-width:860px){
+  .diff{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .checks{grid-template-columns:1fr}
+  .rail-head,.rail-row{grid-template-columns:1fr 34px 1fr}
+  .rail-row>div,.rail-head>div{padding:11px 12px;font-size:13px}
+  .seg{font-size:8px;padding:7px 4px}
+  .seg em{display:none}
+  .shead{gap:12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="/" class="brand">
+      <img class="for-dark" src="/logo-lockup-white.png" alt="ABR MOVE">
+      <img class="for-light" src="/logo-lockup.png" alt="ABR MOVE">
+    </a>
+    <nav class="navlinks">
+      <a href="#sut">Суть</a>
+      <a href="#karta">Карта разделов</a>
+      <a href="#terminy">Термины</a>
+      <a href="#transport">Транспорт</a>
+      <a href="#plotnost">Плотность</a>
+      <a href="#zelen">Озеленение</a>
+      <a href="#inzh">Инженерка</a>
+      <a href="#prilozh">Приложения</a>
+      <a href="#chto-delat">Что делать</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Переключить тему">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a.5.5 0 0 0-.65-.6A9 9 0 1 0 21.1 15.15a.5.5 0 0 0-.6-.65z"/></svg>
+    </button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Разбор редакций · СП 42.13330 · <b>Пересмотр, а не актуализация</b></div>
+    <h1><span class="old">2016</span> <span class="arrow">→</span> 2026<br>Градостроительство.<br>Планировка и застройка&nbsp;территорий</h1>
+    <p class="lede">
+      СП 42.13330.2026 утверждён приказом Минстроя России <b>от 11 июня 2026 г. № 368/пр</b>, введён в действие
+      <b>с 12 июля 2026 г.</b> взамен СП 42.13330.2016. Исполнитель сменился: вместо ФГБУ ЦНИИП Минстроя —
+      <b>ООО «НИИ ПГ»</b>. Это не очередное изменение к 2016-му, а <b>полный пересмотр</b>: изменено даже название —
+      «городских и сельских поселений» → <b>«территорий»</b>.
+    </p>
+    <p class="lede">
+      Главное для проектировщика: документ перестроен с <b>зонального</b> принципа на <b>объектно-системный</b>.
+      Раньше вы искали норму по зоне («жилая», «производственная»), теперь — по объекту и по системе
+      инфраструктуры. Числа геометрии УДС почти не тронуты; тронуто <b>то, где они лежат и как их считать</b>.
+    </p>
+
+    <div class="axes">
+      <div class="axis axis-old">
+        <div class="axis-head"><span class="code">Ось 2016 — по зонам</span><span class="note">15 разделов, 12 действующих приложений</span></div>
+        <div class="strip">
+          <div class="seg">1 Область прим.</div>
+          <div class="seg">2 Норм. ссылки</div>
+          <div class="seg">3 Термины</div>
+          <div class="seg">4 Концепция<em>развития территории</em></div>
+          <div class="seg">5 Жилые<br>зоны</div>
+          <div class="seg">6 Обществ.-деловые зоны</div>
+          <div class="seg">7 Параметры застройки</div>
+          <div class="seg">8 Производств. зоны</div>
+          <div class="seg">9 Рекреац. зоны</div>
+          <div class="seg">10 Учрежд. обслуживания</div>
+          <div class="seg">11 Транспорт и УДС</div>
+          <div class="seg">12 Инж. инфраструктура</div>
+          <div class="seg">13 Инж. подготовка</div>
+          <div class="seg">14 Охрана среды</div>
+          <div class="seg is-gone">15 Пожарные требования</div>
+        </div>
+      </div>
+      <div class="axis axis-new">
+        <div class="axis-head"><span class="code">Ось 2026 — по объектам и системам</span><span class="note">16 разделов, 13 приложений</span></div>
+        <div class="strip">
+          <div class="seg">1 Область прим.</div>
+          <div class="seg">2 Норм. ссылки</div>
+          <div class="seg">3 Термины + сокращения</div>
+          <div class="seg">4 Общие положения</div>
+          <div class="seg is-new">5 Население</div>
+          <div class="seg">6 Организация территории</div>
+          <div class="seg">7 Система инж. инфр. и отходы</div>
+          <div class="seg">8 Система трансп. инфр.</div>
+          <div class="seg">9 Соц. инфраструктура</div>
+          <div class="seg">10 Природоохр. и рекреация</div>
+          <div class="seg">11 Адм.-деловые, ЖКХ</div>
+          <div class="seg">12 Торговля, питание, быт</div>
+          <div class="seg">13 Похоронного назначения</div>
+          <div class="seg is-new">14 Объекты ЕГС ЧС</div>
+          <div class="seg">15 Инж. подготовка</div>
+          <div class="seg">16 Охрана среды</div>
+        </div>
+      </div>
+      <div class="axis-legend">
+        <span><i style="background:#f5a52466"></i>Редакция 2016</span>
+        <span><i style="background:#22d3ee80"></i>Редакция 2026</span>
+        <span><i style="background:#34D399"></i>Раздел появился</span>
+        <span><i style="background:#FB5E7E"></i>Раздел упразднён как самостоятельный</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat c1"><div class="v">139 <span class="s">← 90</span></div><div class="l">нормативных ссылок<br>в разделе 2</div></div>
+      <div class="stat c2"><div class="v">+85</div><div class="l">ссылок добавлено<br>(ГОСТ Р, СП, ГОСТ IEC)</div></div>
+      <div class="stat c3"><div class="v">−36</div><div class="l">ссылок исключено<br>(в т.ч. весь блок 13130)</div></div>
+      <div class="stat c4"><div class="v">30 <span class="s">← 54</span></div><div class="l">собственных терминов<br>в разделе 3</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ СУТЬ ============ -->
+<section id="sut">
+  <div class="wrap">
+    <div class="shead"><div class="snum">01</div><h2>Что произошло по существу</h2></div>
+    <p class="sub">Три сдвига, из которых вытекает почти всё остальное. Если держать их в голове, остальные правки читаются как следствия.</p>
+
+    <h3>Сдвиг 1. Зоны → объекты и системы</h3>
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016</span>
+        <p>Разделы <span class="num">5–9</span> нарезаны по территориальным зонам: жилые, общественно-деловые, производственные, рекреационные. Нормы объектов обслуживания собраны отдельно в разделе 10.</p>
+        <p>Чтобы запроектировать АЗС, вы смотрели «производственные зоны и зоны транспортной инфраструктуры». Чтобы школу — «учреждения обслуживания».</p>
+        <span class="ref">СП 42.13330.2016, разд. 5–10</span>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026</span>
+        <p>Раздел <span class="num">6</span> «Организация территории» держит зонирование и вводит <b>типологию объектов</b> (6.5). Дальше документ идёт по системам и группам объектов: <span class="num">7</span> инженерная, <span class="num">8</span> транспортная, <span class="num">9</span> социальная, <span class="num">10</span> природоохранная и рекреационная, <span class="num">11–13</span> адм.-деловые, торговля, похоронного назначения.</p>
+        <p>Введены термины <b>«система инженерной инфраструктуры»</b>, <b>«система транспортной инфраструктуры»</b>, <b>«типология объектов»</b>.</p>
+        <span class="ref">СП 42.13330.2026, п. 3.1, разд. 6–13</span>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Последствие</span><span>Поиск нормы теперь идёт от <b>объекта</b>, а не от пятна зонирования. Для линейщика это хорошо: весь транспорт (внешний, УДС, ОПТ, вело/СИМ, хранение, ЭЗС, трубопроводы) собран в один раздел 8 вместо разбросанных разд. 8 + 11.</span></div>
+
+    <h3>Сдвиг 2. Рамочность: числа уходят в профильные СП</h3>
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016</span>
+        <ul>
+          <li>Уширение на кривых — <b>Приложение М</b> прямо в СП 42.</li>
+          <li>Поперечные уклоны — <b>п. 11.10</b> (проезжая часть 10–30 ‰, тротуар 5–20 ‰, велодорожка 5–30 ‰).</li>
+          <li>Радиусы закругления борта, треугольники видимости, плотность УДС — частично здесь же.</li>
+        </ul>
+        <span class="ref">СП 42.13330.2016, п. 11.9–11.10, прил. М</span>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026</span>
+        <ul>
+          <li>Радиусы в плане — <b>СП 396.1325800.2018, п. 5.6</b>.</li>
+          <li>Поперечные уклоны — <b>СП 396.1325800.2018, п. 5.5</b>.</li>
+          <li>Плотность УДС — <b>СП 396.1325800.2018, п. 5.4</b>.</li>
+          <li>Радиусы закругления борта — <b>СП 396.1325800</b>.</li>
+          <li>Треугольники видимости — расчёт по <b>СП 396.1325800</b>.</li>
+          <li>Ширина тротуаров и внеуличных переходов — <b>СП 396.1325800.2018, разд. 7</b> + СП 59.13330.2020, п. 5.1.7.</li>
+          <li>Приложение «Уширение полосы движения на кривых» — <b>исключено</b>.</li>
+        </ul>
+        <span class="ref">СП 42.13330.2026, п. 8.47, 8.51, 8.52, 8.54, 8.58, 8.107</span>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Последствие</span><span>СП 42 становится «верхним» документом территориального планирования и ДПТ. Геометрия УДС окончательно закреплена за <b>СП 396.1325800</b>. Ссылки в пояснительных записках и в рабочих шаблонах надо переадресовывать.</span></div>
+
+    <h3>Сдвиг 3. Нормируется не радиус, а путь</h3>
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016</span>
+        <p><b>«Радиус обслуживания»</b> — по прямой на плане. Таблица 10.1: ДОО и школы 500 м, стеснённая застройка 800 м, село 1000 м. Остановка ОПТ — «дальность пешеходных подходов» не более 500 м.</p>
+        <span class="ref">СП 42.13330.2016, п. 10.4, 11.24, табл. 10.1</span>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026</span>
+        <p><b>«Территориальная доступность»</b> — пешеходная доступность. Значения для ДОО и школ те же (500 / 800 / 1000 м), но прямо сказано: доступность до остановки ОПТ считают <b>«не по прямому расстоянию на плоскости, а по протяжённости пешеходных коммуникаций и пространств»</b> (п. 8.84), а расстояния до остановок в табл. 8.12 — <b>от границы земельного участка</b> объекта.</p>
+        <span class="ref">СП 42.13330.2026, п. 8.83–8.84, табл. 8.12, прил. Л</span>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Последствие</span><span>Изохроны по буферу окружности больше не проходят. Нужен сетевой расчёт по пешеходному графу. При извилистой сети фактическая «зона покрытия» сжимается на 20–40 % против прежнего круга того же радиуса — это меняет посадку остановок и объектов в ППТ.</span></div>
+  </div>
+</section>
+
+<!-- ============ КАРТА РАЗДЕЛОВ ============ -->
+<section id="karta">
+  <div class="wrap">
+    <div class="shead"><div class="snum">02</div><h2>Карта переноса разделов</h2></div>
+    <p class="sub">Куда переехало содержимое каждого раздела 2016 года. Это первое, что стоит распечатать, если у вас на руках проект, выполненный по прежней редакции.</p>
+
+    <div class="rail">
+      <div class="rail-head">
+        <div class="c1">СП 42.13330.2016</div>
+        <div></div>
+        <div class="c3">СП 42.13330.2026</div>
+      </div>
+
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">1</span>Область применения</div><div class="c2">→</div>
+        <div class="c3"><span class="k">1</span>Область применения<span class="chip keep">перенос</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">2</span>Нормативные ссылки</div><div class="c2">→</div>
+        <div class="c3"><span class="k">2</span>Нормативные ссылки<span class="chip rework">+85 / −36</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">3</span>Термины и определения</div><div class="c2">→</div>
+        <div class="c3"><span class="k">3</span>Термины, определения <b>и сокращения</b><span class="chip rework">54 → 30 + 3.2</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">4</span>Концепция развития и общая организация территории</div><div class="c2">⇉</div>
+        <div class="c3"><span class="k">4</span>Общие положения &nbsp;·&nbsp; <span class="k">5</span>Население &nbsp;·&nbsp; <span class="k">6</span>Организация территории<span class="chip rework">разделён на три</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">5</span>Жилые зоны</div><div class="c2">→</div>
+        <div class="c3"><span class="k">6.2</span>Зонирование &nbsp;·&nbsp; <span class="k">6.4</span>Объёмно-пространственная организация<span class="chip rework">поглощён</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">6</span>Общественно-деловые зоны</div><div class="c2">⇉</div>
+        <div class="c3"><span class="k">6.2</span>Зонирование &nbsp;·&nbsp; <span class="k">11</span>Адм.-деловые, ЖКХ &nbsp;·&nbsp; <span class="k">12</span>Торговля, питание, быт<span class="chip rework">расщеплён</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">7</span>Параметры застройки жилых и общественно-деловых зон</div><div class="c2">→</div>
+        <div class="c3"><span class="k">6.4</span>Объёмно-пространственная организация &nbsp;·&nbsp; <span class="k">Б</span>Плотность застройки<span class="chip rework">переработан</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">8</span>Производственные зоны, зоны транспортной и инженерной инфраструктуры, с/х использования</div><div class="c2">⇉</div>
+        <div class="c3"><span class="k">6.4–6.5</span>Застройка и типология &nbsp;·&nbsp; <span class="k">7</span>Инженерная инфраструктура &nbsp;·&nbsp; <span class="k">8</span>Транспортная инфраструктура<span class="chip rework">расщеплён</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">9</span>Зоны рекреационного назначения. Зоны ООТ</div><div class="c2">→</div>
+        <div class="c3"><span class="k">10</span>Объекты природоохранного значения и рекреационной инфраструктуры &nbsp;·&nbsp; <span class="k">М</span>Нормы рекреации<span class="chip rework">переработан</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">10</span>Учреждения, организации и предприятия обслуживания</div><div class="c2">⇉</div>
+        <div class="c3"><span class="k">9</span>Социальная инфраструктура &nbsp;·&nbsp; <span class="k">11–13</span> &nbsp;·&nbsp; <span class="k">Л</span>Единая таблица норм<span class="chip rework">расщеплён</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">11</span>Транспорт и улично-дорожная сеть</div><div class="c2">→</div>
+        <div class="c3"><span class="k">8</span>Система транспортной инфраструктуры<span class="chip rework">расширен</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">12</span>Инженерная инфраструктура</div><div class="c2">→</div>
+        <div class="c3"><span class="k">7</span>Система инженерной инфраструктуры и обращения с отходами &nbsp;·&nbsp; <span class="k">Д, Е, Ж</span><span class="chip rework">расширен</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">13</span>Инженерная подготовка и защита территории</div><div class="c2">→</div>
+        <div class="c3"><span class="k">15</span>Инженерная подготовка и защита территории<span class="chip keep">перенос</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">14</span>Охрана окружающей среды</div><div class="c2">→</div>
+        <div class="c3"><span class="k">16</span>Охрана окружающей среды<span class="chip keep">перенос</span></div>
+      </div>
+      <div class="rail-row gone">
+        <div class="c1"><span class="k">15</span>Требования пожарной безопасности</div><div class="c2">✕</div>
+        <div class="c3"><span class="k">4.12</span>Один пункт: «в соответствии с [19]» &nbsp;·&nbsp; депо — по <span class="k">14.2</span> и СП 380.1325800<span class="chip gone">свёрнут</span></div>
+      </div>
+      <div class="rail-row new">
+        <div class="c1" style="color:var(--neutral-4)">—</div><div class="c2">＋</div>
+        <div class="c3"><span class="k">5</span>Население: постоянное / временное, домохозяйства, курорты, СНТ, вахта<span class="chip new">новый раздел</span></div>
+      </div>
+      <div class="rail-row new">
+        <div class="c1" style="color:var(--neutral-4)">—</div><div class="c2">＋</div>
+        <div class="c3"><span class="k">14</span>Объекты единой государственной системы предупреждения и ликвидации ЧС<span class="chip new">новый раздел</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Про пожарные требования.</b> Формально раздел 15 упразднён, но фактической потери требований почти нет:
+      в 2016 г. он и так состоял из семи отсылочных пунктов. В 2026 г. остался п. 4.12 («требования пожарной безопасности
+      следует устанавливать в соответствии с [19]») и п. 14.2 по земельным участкам пожарных депо через СП 380.1325800.
+      Из нормативных ссылок при этом убран весь блок СП *.13130 и СП 166.1311500 — искать эти документы в СП 42 больше не нужно.
+    </div>
+  </div>
+</section>
+
+<!-- ============ ТЕРМИНЫ ============ -->
+<section id="terminy">
+  <div class="wrap">
+    <div class="shead"><div class="snum">03</div><h2>Термины и ссылочная база</h2></div>
+    <p class="sub">Раздел 3 сократили почти вдвое и добавили подраздел 3.2 «Сокращения» — раньше аббревиатуры расшифровывались по тексту.</p>
+
+    <div class="diff">
+      <div class="card now">
+        <span class="tag">Появились · 2026</span>
+        <ul>
+          <li><b>велотранспортная инфраструктура</b> — велокоммуникации + объекты обслуживания велосипедов и СИМ</li>
+          <li><b>постоянное / временное население</b> — туристы, вахта, садоводы</li>
+          <li><b>городская агломерация</b>, <b>опорный населённый пункт</b>, <b>прилегающая территория</b></li>
+          <li><b>домохозяйство</b> — база расчёта жилищного фонда</li>
+          <li><b>система инженерной инфраструктуры</b>, <b>система транспортной инфраструктуры</b></li>
+          <li><b>типология объектов</b>, <b>параметры и характеристики объекта</b></li>
+          <li><b>стеснённые условия застройки</b> и <b>стеснённая городская застройка</b> — теперь два разных термина</li>
+          <li><b>планировочные ограничения</b>, <b>рекреационная инфраструктура</b>, <b>объекты социальной инфраструктуры</b></li>
+        </ul>
+      </div>
+      <div class="card was">
+        <span class="tag">Исключены · были в 2016</span>
+        <ul>
+          <li>Историко-градостроительный блок: <b>морфотипы</b>, <b>целостная / нарушенная историческая среда</b>, <b>градообразующий потенциал наследия</b>, <b>зоны исторической застройки</b></li>
+          <li>Планировочный блок: <b>жилой район</b>, <b>межмагистральные территории</b>, <b>примагистральная территория</b>, <b>главные улицы общегородского центра</b></li>
+          <li>Транспортный блок: <b>интенсивность движения</b>, <b>интенсивность пешеходного движения</b>, <b>тротуар</b>, <b>разворотные площадки</b>, <b>гостевая стоянка</b>, <b>кооперированные стоянки</b>, <b>стоянка автомобилей (паркинг, гараж-стоянка)</b></li>
+          <li>Правовой блок: <b>красные линии</b>, <b>территориальные зоны</b>, <b>функциональные зоны</b>, <b>градостроительное зонирование</b>, <b>КРТ</b>, <b>ЗОУИТ</b>, <b>городской / муниципальный округ</b> — теперь напрямую по ГрК РФ [1]</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Как читать</span><span>Термины не «отменены», а переадресованы: п. 3.1 прямо говорит, что применяются термины по [1]–[4], ГОСТ Р 71473, ГОСТ Р 57617, СП 54, 82, 113, 118, 395, 396, 398, 475, 476. Понятие «тротуар» теперь берётся из СП 396.1325800, «парк/сад/сквер/бульвар» — из <b>ГОСТ Р 71473</b> (прим. 1 к табл. М.1).</span></div>
+
+    <h3>Новые сокращения, которых не было как отдельного перечня</h3>
+    <p>АЗС, ВЛ, ВРИ, ДПТ, ЗОУИТ, ЛКС ТМК, ЛО, МГН, МНГП, МФЦ, <b>НГП</b> (нормативы городов федерального значения — новая категория), ОКС, ООПТ, ОПТ, ПЗЗ, ПМТ, ППТ, РНГП, СЗЗ, <b>СИМ</b>, СУГ, ТКО, ТЛО, ТОП, ТПУ, УДС, ЧС, <b>ЭПС</b> (элемент планировочной структуры).</p>
+    <div class="note">
+      <b>НГП / РНГП / МНГП.</b> В 2016-м везде фигурировали только РНГП. В 2026-м почти каждый нормируемый параметр
+      сопровождается формулой «в соответствии с НГП, РНГП, МНГП, при их отсутствии — по настоящему своду правил».
+      Практически это означает: <b>СП 42 стал резервным источником</b>, а первичный — региональные и местные нормативы.
+    </div>
+
+    <h3>Ссылочная база: что зашло и что вышло</h3>
+    <div class="diff">
+      <div class="card now">
+        <span class="tag">Добавлено (выборка, важное для дорожника)</span>
+        <ul>
+          <li><b>ГОСТ 33150</b> — пешеходные и велосипедные дорожки</li>
+          <li><b>ГОСТ Р 70716</b> — безопасность движения пешеходов</li>
+          <li><b>ГОСТ Р 52766</b>, <b>ГОСТ 32945</b>, <b>ГОСТ 33128</b>, <b>ГОСТ Р 59401</b>, <b>ГОСТ Р 52605</b></li>
+          <li><b>ГОСТ Р МЭК 61851-1</b>, <b>ГОСТ IEC 62196-1</b> — зарядка электротранспорта</li>
+          <li><b>ГОСТ Р 71473</b> — ландшафтная архитектура, термины</li>
+          <li><b>ГОСТ Р 59812</b> — доступность объектов городской инфраструктуры для инвалидов</li>
+          <li><b>СП 35.13330</b> (мосты), <b>СП 37.13330</b> (промтранспорт), <b>СП 256.1325800</b> (электроустановки)</li>
+        </ul>
+      </div>
+      <div class="card was">
+        <span class="tag">Исключено из раздела 2</span>
+        <ul>
+          <li>Весь пожарный блок: <b>СП 4.13130</b>, <b>СП 153.13130</b>, <b>СП 155.13130</b>, <b>СП 156.13130</b>, <b>СП 166.1311500</b></li>
+          <li><b>СП 122.13330</b> (тоннели), <b>СП 21.13330</b>, <b>СП 45.13330</b>, <b>СП 52.13330</b>, <b>СП 53.13330</b></li>
+          <li><b>ГОСТ 32961</b> (бортовые камни), <b>ГОСТ Р 52875</b>, <b>ГОСТ 23337</b>, <b>ГОСТ 27751</b></li>
+          <li><b>СП 2.1</b>, <b>СП 2.4</b> (СанПиН) — переведены в библиографию как [17], [18], [33]</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note flag">
+      <b>Внимание на ГОСТ 32961.</b> В 2016 г. он вызывался в п. 11.11 для доборного бортового камня на разворотных площадках.
+      В 2026 г. и сама норма 15×15 м, и ссылка на ГОСТ 32961 из раздела 2 исчезли. Если у вас типовые узлы завязаны на эту связку —
+      её надо пересобрать через СП 396.1325800.
+    </div>
+  </div>
+</section>
+
+<!-- ============ ТРАНСПОРТ ============ -->
+<section id="transport">
+  <div class="wrap">
+    <div class="shead"><div class="snum">04</div><h2>Транспорт: раздел 11 → раздел 8</h2></div>
+    <p class="sub">Самый выросший блок документа. Раздел 8 теперь охватывает железнодорожный, воздушный, водный транспорт, автодороги вне границ НП, УДС, грузовые перевозки, ОПТ, вело/СИМ, пешеходные связи, хранение и обслуживание ТС, зарядные станции и трубопроводный транспорт.</p>
+
+    <h3>Расчётные параметры УДС: числа не тронуты</h3>
+    <p>Таблица 8.5 (крупнейшие / крупные / большие) — это таблица 11.2 один в один: расчётные скорости 130…30 км/ч, ширина полосы 3,50–3,75 / 3,25–3,75 / 3,0–3,5 м, радиусы в плане 1200/1900 … 40/40 м, уклоны 40…80 ‰, радиусы вертикальных кривых 21500…600 и 2600…200 м. Тротуары: 4,5 / 3,0 / 2,25 / 2,0 м. Таблицы 8.7 (сельские) и 8.8 (парковые дороги) также совпадают с 11.4 и 11.6.</p>
+    <div class="verdict"><span class="vk">Вывод</span><span>Геометрия трассы и профиля по СП 42 <b>не изменилась</b>. Пересчитывать существующие решения по этой причине не нужно. Изменения сидят <b>в примечаниях</b> к таблице и в смежных пунктах — там, где живут стеснённые условия и реконструкция.</span></div>
+
+    <h3>Что изменилось в примечаниях к расчётным параметрам</h3>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Параметр</th><th class="was">2016 (табл. 11.2)</th><th class="now">2026 (табл. 8.5)</th><th>Эффект</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p">Тротуар при реконструкции / потоке &lt; 50 чел./ч</td>
+            <td class="v was">1,2 м</td>
+            <td class="v now">2,0 м<br><span style="color:var(--muted)">1,2 м только в стеснённых</span></td>
+            <td class="d"><span class="up">Ужесточение.</span> Порог поднят почти вдвое; 1,2 м переведён в исключение</td>
+          </tr>
+          <tr>
+            <td class="p">Проезжая часть при реконструкции ИЖС / блокированной застройки</td>
+            <td class="v was">нормы нет</td>
+            <td class="v now">≥ 4,5 м</td>
+            <td class="d"><span class="down">Послабление.</span> Легализована существующая ширина &lt; 6 м при потоке ≤ 100 прив. авт./ч, с разъездами и выделением путей пешеходов, велосипедистов и СИМ</td>
+          </tr>
+          <tr>
+            <td class="p">Обслуживание подпорных стен и шумозащитных экранов</td>
+            <td class="v was">нормы нет</td>
+            <td class="v now">служебный проход ≥ 0,75 м</td>
+            <td class="d">Новое. Технический тротуар с твёрдым покрытием</td>
+          </tr>
+          <tr>
+            <td class="p">Снижение расчётной скорости в стеснённых условиях</td>
+            <td class="v was">−10 км/ч<br><span style="color:var(--muted)">только магистрали</span></td>
+            <td class="v now">−10 км/ч магистрали<br>60+ → 40–50 местные</td>
+            <td class="d"><span class="down">Послабление.</span> Появился явный механизм для улиц местного значения</td>
+          </tr>
+          <tr>
+            <td class="p">Число полос движения</td>
+            <td class="v was">без оговорок</td>
+            <td class="v now">без доп. полос<br><span style="color:var(--muted)">по СП 396.1325800</span></td>
+            <td class="d">Уточнение. Переходно-скоростные и накопительные полосы в число полос таблицы не входят</td>
+          </tr>
+          <tr>
+            <td class="p">Выделенная полоса ОПТ 3,75 м</td>
+            <td class="v was">прим. 4 табл. 11.2</td>
+            <td class="v now">снято из примечаний</td>
+            <td class="d">Перенос в п. 8.80 и СП 396.1325800 / СП 98.13330</td>
+          </tr>
+          <tr>
+            <td class="p">Резервирование под перспективное строительство</td>
+            <td class="v was">территории и подземного пространства</td>
+            <td class="v now">земельных участков</td>
+            <td class="d">Юридизация формулировки: резервируется участок, а не «территория»</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Разворотные площадки и тупики: ключевая правка для рабочих проектов</h3>
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016, п. 11.11</span>
+        <p>Разворотная площадка в конце тупика — <b>не менее 15 × 15 м</b>, с учётом СП 4.13130, с возможностью использовать примыкающие тротуары через доборный бортовой камень по ГОСТ 32961.</p>
+        <p>Конечный пункт ОПТ — разворотная площадка с <b>центральным островком диаметром ≥ 30 м</b>.</p>
+        <p>Тупиковые проезды — не более <b>150 м</b>.</p>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026, п. 8.49–8.50</span>
+        <p>Размеры площадки — <b>по габаритам ТС и радиусу разворота в соответствии с СП 396.1325800</b>. Жёсткого «15 × 15» больше нет. Добавлено обязательное требование: <b>средства визуальной информации</b>.</p>
+        <p>Конечный пункт ОПТ — расчётное ТС по <b>максимальным габаритам</b>, островок в размерах, обеспечивающих выполнение разворотного манёвра. Числа 30 м нет.</p>
+        <p>Тупиковые проезды — <b>150 м</b>, без изменений.</p>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Практика</span><span>Уход от «15 × 15» — <b>палка о двух концах</b>. С одной стороны, в стеснёнке можно обосновать меньшую площадку. С другой — теперь придётся <b>считать заметание траекторий</b> (swept path) под конкретное расчётное ТС, а не ссылаться на квадрат. Заготовьте расчётные ТС и шаблоны траекторий в Robur/Civil 3D заранее.</span></div>
+
+    <h3>Отступ от магистрали до жилья: тихое ужесточение</h3>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Условие</th><th class="was">2016, п. 11.11</th><th class="now">2026, п. 6.4.17</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p">Новое строительство, база</td>
+            <td class="v was">≥ 50 м от края основной проезжей части до <b>фасада</b></td>
+            <td class="v now">≥ 50 м до <b>линии отступа от границ ЗУ</b> жилой застройки<br>+ ≥ 20 м от красных линий до стен зданий</td>
+          </tr>
+          <tr>
+            <td class="p">С шумозащитой</td>
+            <td class="v was">≥ 25 м (прямое послабление)</td>
+            <td class="v now">сокращение <b>только в стеснённых условиях</b>, числа нет; экраны — <b>последнее средство</b> при обосновании невозможности иных мероприятий</td>
+          </tr>
+          <tr>
+            <td class="p">Область применения</td>
+            <td class="v was">магистральные дороги</td>
+            <td class="v now">дороги в НП + автодороги <b>категорий I–III, сопредельные с границей НП</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note flag">
+      <b>Смысловая разница.</b> В 2016-м 50 м мерились до фасада. В 2026-м — до линии отступа от границы участка,
+      а от красных линий до стен — ещё минимум 20 м. Суммарно расстояние от кромки проезжей части до стены
+      в новом строительстве получается <b>ощутимо больше прежних 50 м</b>. Приоритет отдан снижению скорости,
+      интенсивности, покрытиям и зелёным преградам; шумозащитный экран разрешён только когда доказано, что иное невозможно.
+    </div>
+
+    <h3>Общественный транспорт: доступность переписана целиком</h3>
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016, п. 11.23–11.25</span>
+        <ul>
+          <li>Плотность сети линий ОПТ — <b>числа нет</b>, «в зависимости от функционального использования и интенсивности пассажиропотоков»</li>
+          <li>Дальность подходов — <b>500 м</b>; IA/IБ/IГ/IIА — 300 м; IД и IV — 400 м</li>
+          <li>Общегородской центр — 250 м; поликлиники — 150 м; производственные зоны — 400 м от проходной; зоны отдыха — 800 м; ТПУ — 300 м</li>
+          <li>Малоэтажка: до 600 м (большие/крупные/крупнейшие), до 800 м (малые/средние)</li>
+          <li>Стеснёнка: сокращение расстояний между остановками в пределах <b>20 %</b></li>
+          <li>Метрополитен 1000–3200 м, ж/д 1500–3200 м</li>
+        </ul>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026, п. 8.81–8.85, табл. 8.12</span>
+        <ul>
+          <li>Плотность сети линий ОПТ — <b>1,5–2,5 км/км²</b> (числовая норма появилась)</li>
+          <li>Расстояние — <b>от границы земельного участка</b> объекта, по пешеходным коммуникациям:<br>МКД <b>500</b> м, ИЖС <b>800</b> м, торговля ≥ 1000 м² — <b>500</b> м, поликлиники и соцобслуживание — <b>150</b> м, терминалы внешнего транспорта — <b>300</b> м</li>
+          <li>Вместо климатических подрайонов — <b>поимённый перечень 45 субъектов</b> с особыми условиями: МКД 400 м, ИЖС 700 м</li>
+          <li>Стеснёнка: сокращение в пределах <b>30 %</b>, в центральной части — до 200 м</li>
+          <li>Метрополитен 1000–3000 м, городские ж/д 1500–2000 м</li>
+          <li>Новая табл. 8.11: провозная способность и скорость сообщения по видам ОПТ (2400–70000 пасс/ч, 18–60 км/ч)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict"><span class="vk">Практика</span><span>Замена «климатический подрайон» → «перечень субъектов» упрощает применение (не нужно лезть в СП 131), но <b>меняет географию</b>: в списке оказались и Ростовская область, и Ставрополье, и Дагестан — то есть логика уже не только про холод. Проверяйте свой субъект по прим. к табл. 8.12, а не по привычной климатической карте.</span></div>
+
+    <h3>Хранение и стоянки</h3>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Параметр</th><th class="was">2016</th><th class="now">2026</th><th>Комментарий</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p">Число мест на квартиру<br><span style="color:var(--muted);font-size:12px">табл. 11.8 → 8.16</span></td>
+            <td class="v was">Бизнес-класс 2,0<br>Стандартное 1,2<br><b>Муниципальный 1,0</b><br><b>Специализированный 0,7</b></td>
+            <td class="v now">Бизнес-класс 2,0<br>Стандартный 1,2<br>—<br>—</td>
+            <td class="d">Две строки убраны. Для муниципального и специализированного жилья теперь — по НГП/РНГП/МНГП/ПЗЗ</td>
+          </tr>
+          <tr>
+            <td class="p">Приведение к легковому автомобилю</td>
+            <td class="v was">мотоциклы с коляской 0,5<br>без коляски 0,28<br><b>мопеды и велосипеды 0,1</b></td>
+            <td class="v now">мотоциклы с коляской 0,5<br>без коляски 0,28<br>мопеды 0,1<br><b>велосипеды, СИМ — 1,0</b></td>
+            <td class="d"><span class="up">Резкий скачок.</span> Велосипед и СИМ приравнены к легковому автомобилю коэффициентом 1,0 против прежних 0,1</td>
+          </tr>
+          <tr>
+            <td class="p">Гостевые стоянки</td>
+            <td class="v was">≥ 30 м/м на 1000 жителей<br><span style="color:var(--muted)">«рекомендуется»</span></td>
+            <td class="v now">≥ 30 мест на 1000 жителей<br><span style="color:var(--muted)">«следует предусматривать»</span></td>
+            <td class="d">Число то же, модальность жёстче</td>
+          </tr>
+          <tr>
+            <td class="p">Пешеходный подход до постоянного хранения</td>
+            <td class="v was">800 м / 1200 м при реконструкции</td>
+            <td class="v now">800 м / 1200 м<br>+ уточнение в НГП/РНГП/МНГП/ПЗЗ</td>
+            <td class="d eq">Без изменений</td>
+          </tr>
+          <tr>
+            <td class="p">Подход от гостевых и приобъектных стоянок</td>
+            <td class="v was">жильё 200 · вокзалы, торговля 200 · прочее 250<br>парки, выставки, стадионы <b>400</b></td>
+            <td class="v now">жильё 200 · вокзалы, торговля 200 · прочее 250<br>объекты массового пребывания <b>400</b>, при обеспечительных мероприятиях — до <b>1200</b></td>
+            <td class="d"><span class="down">Послабление.</span> Определён «объект массового пребывания» — 50 чел. и более. Для 1200 м требуются тротуар ≥ 2 м с твёрдым покрытием, освещение и места отдыха не реже 200 м</td>
+          </tr>
+          <tr>
+            <td class="p">Хранение вдоль улиц</td>
+            <td class="v was">нормы нет</td>
+            <td class="v now">допускается вдоль местных улиц и дорог в стеснённых условиях</td>
+            <td class="d">Новое, п. 8.114</td>
+          </tr>
+          <tr>
+            <td class="p">Земельный участок на 1 м/м</td>
+            <td class="v was">1 эт. 30 · 2 эт. 20 · 3 эт. 14 · 4 эт. 12 · 5 эт. 10 · наземные 25</td>
+            <td class="v now">то же</td>
+            <td class="d eq">Без изменений</td>
+          </tr>
+          <tr>
+            <td class="p">Въезды/выезды в гаражи-стоянки</td>
+            <td class="v was">от перекрёстков магистралей 50 · местных 20 · от остановок 30</td>
+            <td class="v now">то же, но «от <b>посадочных площадок</b> остановочных пунктов»</td>
+            <td class="d">Уточнена точка отсчёта</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note flag">
+      <b>Коэффициент 1,0 для велосипедов и СИМ.</b> В табл. 8.16 (прим. 2) велосипеды и СИМ приведены к легковому
+      автомобилю с коэффициентом <b>1,0</b>, тогда как в 2016 г. «мопеды и велосипеды» шли с 0,1. Формально это
+      кратно увеличивает расчётную потребность в местах хранения при учёте велосипедов. Стоит следить за
+      разъяснениями Минстроя: значение выглядит нетипично на фоне остального ряда (0,5 / 0,28 / 0,1).
+    </div>
+
+    <h3>Новое в разделе 8, чего не было вообще</h3>
+    <div class="diff">
+      <div class="card now">
+        <span class="tag">Зарядная инфраструктура · п. 8.131–8.139</span>
+        <ul>
+          <li>Типы 1–4 по ГОСТ Р МЭК 61851-1 и СП 256.1325800; отдельно — <b>комплексы ЗС</b></li>
+          <li>Перечень допустимых мест размещения: придорожные полосы, объекты дорожного сервиса, УДС, ТПУ, отстойно-разворотные площадки, автобусные парки, МКД, ИЖС, стоянки всех типов</li>
+          <li>В ТПУ межрегионального и регионального значения — <b>≥ 2 быстрых ЗС</b> плюс туалеты, кафе, зоны ожидания</li>
+          <li>На плоскостных стоянках ЗС постоянного тока типов 1 и 2 — <b>одновременная зарядка ≥ 2 ед.</b></li>
+          <li>На АЗС, объектах дорожного сервиса и в границах УДС — <b>только стандартные или быстрые</b></li>
+          <li>≥ 1 место, доступное для инвалидов на кресле-коляске (СП 59.13330)</li>
+          <li>Вне НП — по СП 34.13330.2021, п. 11.15</li>
+        </ul>
+      </div>
+      <div class="card now">
+        <span class="tag">Вело / СИМ · п. 8.92–8.100</span>
+        <ul>
+          <li>Введены <b>опорная сеть</b> и <b>подводящие направления</b></li>
+          <li>Опорная сеть — вдоль УДС, <b>кроме магистральных городских дорог</b></li>
+          <li>Табл. 8.13: совместное движение пешеходов и велосипедистов — 70 ед./ч → 2,5–3,0 м; 100 → 3,0–4,0 м; 150 → более 4,0 м; доля вело в потоке — <b>не более ⅓</b></li>
+          <li>Целевые дальности: деловые 5–15 км, рекреационные 10–50 км, между центрами притяжения 2–10 км, внутри микрорайона до 2 км</li>
+          <li>Табл. 8.14 — требования по безопасности, связности, прямолинейности (в т.ч. запрет неопущенного борта)</li>
+          <li>Велошеринг, пункты проката, площадки подкачки — плотность по НГП/РНГП/МНГП</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Безопасность движения: появились прямые требования</h3>
+    <div class="diff">
+      <div class="card now">
+        <span class="tag">Островки безопасности · п. 8.57</span>
+        <ul>
+          <li>Обязательны: на <b>регулируемых</b> переходах через 4 полосы или проезжую часть шире <b>12 м</b>; на <b>нерегулируемых</b> — шире <b>8 м</b></li>
+          <li>При отсутствии разделительной и невозможности сохранить ширину полос — равномерное заужение в створе островка, <b>но не менее 3,0 м для улиц и 3,25 м для дорог</b></li>
+          <li>При V ≤ 60 км/ч — знак 4.2.1 / 4.2.3 предпочтительного типоразмера по ГОСТ 32945</li>
+        </ul>
+        <span class="ref">В СП 42.13330.2016 требований к островкам безопасности не было</span>
+      </div>
+      <div class="card now">
+        <span class="tag">Подходы к школам · прил. Л, сноска 6</span>
+        <ul>
+          <li>Пути к начальной школе <b>не пересекают магистрали в одном уровне</b> — как и было, но теперь «в сложившихся условиях застройки и планируемом развитии территории»</li>
+          <li>Если разные уровни невозможны — <b>ограждения по краю проезжей части и на центральной разделительной</b> при 3 и более полосах (ГОСТ Р 52289, ГОСТ Р 59401, ГОСТ 33128)</li>
+          <li>Переходы в одном уровне — <b>со светофорным регулированием при более чем 2 полосах</b></li>
+          <li>Без светофора — ИН, принудительное снижение скорости, светодиодные маячки (ГОСТ Р 70716, ГОСТ Р 52605)</li>
+          <li>Сборно-разборные ИН — на <b>12–15 м</b> от разметки 1.14</li>
+          <li>Подход до места сбора на остановке ≤ 500 м (село — до 1000 м), навес с ограждением с трёх сторон, барьер от проезжей части, обзорность <b>≥ 250 м</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Ещё точечно по УДС</h3>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Параметр</th><th class="was">2016</th><th class="now">2026</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="p">Тротуар на основных проездах <span style="color:var(--muted);font-size:12px">табл. 11.6 → 8.9</span></td><td class="v was">1,0 м</td><td class="v now"><span class="up">2,0 м</span></td></tr>
+          <tr><td class="p">Тротуар на второстепенных проездах</td><td class="v was">0,75 м</td><td class="v now"><span class="up">1,0 м</span></td></tr>
+          <tr><td class="p">Велодорожки в таблице параметров</td><td class="v was">строки в табл. 11.6 (1,5 / 1,0 м)</td><td class="v now">убраны → СП 396.1325800</td></tr>
+          <tr><td class="p">Разделительная полоса «тротуар — трамвайное полотно» <span style="color:var(--muted);font-size:12px">табл. 11.7 → 8.10</span></td><td class="v was">2,0 м</td><td class="v now">строка удалена</td></tr>
+          <tr><td class="p">Разметка вместо разделительной полосы</td><td class="v was">не предусмотрено</td><td class="v now">допускается на магистральных улицах и улицах районного значения (ГОСТ Р 52289)</td></tr>
+          <tr><td class="p">Уширение на кривых R ≤ 400 м</td><td class="v was">табл. М.1 или расчёт</td><td class="v now">в стеснёнке допускается <b>без уширения</b> при доп. мерах БДД (ГОСТ Р 52289)</td></tr>
+          <tr><td class="p">Категории улиц средних и малых НП</td><td class="v was">табл. 11.1а</td><td class="v now">табл. 8.3, отдельная классификация: городские дороги, улицы общегородского / районного значения, местного значения, пешеходные, дороги районного значения</td></tr>
+          <tr><td class="p">Затраты времени «дом → работа»</td><td class="v was">45 / 40 / 37 / 35 / 30 мин</td><td class="v now">те же, но <b>«в утренний и вечерний часы пик»</b>, с методикой: до общегородского центра от границы самой удалённой жилой зоны, допускается по <b>центроиду</b></td></tr>
+          <tr><td class="p">Автодороги I–III категорий на территории НП</td><td class="v was">общие требования</td><td class="v now">п. 8.36: при реконструкции параметры — <b>по классификации УДС (табл. 8.2–8.8)</b>, а не по СП 34</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ПЛОТНОСТЬ ============ -->
+<section id="plotnost">
+  <div class="wrap">
+    <div class="shead"><div class="snum">05</div><h2>Плотность и жилая застройка</h2></div>
+    <p class="sub">Здесь самый красивый пример «изменили всё, не изменив ничего».</p>
+
+    <div class="diff">
+      <div class="card was">
+        <span class="tag">Было · 2016, п. 7.6</span>
+        <p>«Расчётная плотность населения микрорайона при многоэтажной комплексной застройке и средней жилищной обеспеченности <span class="num">20 м²/чел.</span> не должна превышать <span class="num">450 чел./га</span>.»</p>
+      </div>
+      <div class="card now">
+        <span class="tag">Стало · 2026, п. 6.2.16</span>
+        <p>«Предельная расчётная плотность населения микрорайона при средней жилищной обеспеченности <span class="num">30 м²/чел.</span> составляет <span class="num">300 чел./га</span>. В случае установления другого показателя в НГП, РНГП, МНГП расчётную плотность определяют пропорционально данной.»</p>
+      </div>
+    </div>
+    <div class="verdict">
+      <span class="vk">Арифметика</span>
+      <span>450 × 20 = <b>9000 м²/га</b>. 300 × 30 = <b>9000 м²/га</b>. Предельная жилая площадь на гектар <b>не изменилась</b>.
+      Изменилась базовая точка отсчёта: 20 м²/чел. заменены на 30 м²/чел. — под целевые показатели 33,0 м²/чел. к 2030 г.
+      и 38 м²/чел. к 2036 г. (прим. 2 к п. 6.2.13). Плюс введена прямая пропорциональная формула пересчёта, которой раньше не было.</span>
+    </div>
+
+    <h3>Норма жилищной обеспеченности — новая таблица</h3>
+    <p>Табл. 6.1: бизнес-класс — <b>40 м²/чел.</b>, стандартный — <b>30 м²/чел.</b> Для государственного и муниципального фондов — по норме предоставления согласно ЖК РФ. Для ИЖС — исходя из среднего размера домохозяйства. В 2016 г. такой таблицы не было вовсе.</p>
+
+    <h3>Приложение Б: коэффициенты те же, оговорки — новые</h3>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Функциональная зона</th><th class="was">К<sub>з</sub> / К<sub>пз</sub> 2016</th><th class="now">К<sub>з</sub> / К<sub>пз</sub> 2026</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="p">Многоэтажная (9 эт. и более)</td><td class="v was">0,4 / 1,2</td><td class="v now">0,4 / 1,2</td></tr>
+          <tr><td class="p">Средне- и малоэтажная</td><td class="v was">0,4 / 0,8</td><td class="v now">0,4 / 0,8</td></tr>
+          <tr><td class="p">Блокированная</td><td class="v was">0,3 / 0,6</td><td class="v now">0,3 / 0,6</td></tr>
+          <tr><td class="p">Индивидуальная</td><td class="v was">0,2 / 0,4</td><td class="v now">0,2 / 0,4</td></tr>
+          <tr><td class="p">Многофункциональная общественно-деловая</td><td class="v was">1,0 / 3,0</td><td class="v now">1,0 / 3,0</td></tr>
+          <tr><td class="p">Специализированная общественная</td><td class="v was">0,8 / 2,4</td><td class="v now">0,8 / 2,4</td></tr>
+          <tr><td class="p">Курортная зона, зона отдыха</td><td class="v was">—</td><td class="v now"><span class="down">0,5 / 1,6</span> — новая строка</td></tr>
+          <tr><td class="p">Промышленная</td><td class="v was">0,8 / 2,4</td><td class="v now">0,8 / 2,4</td></tr>
+          <tr><td class="p">Научно-производственная</td><td class="v was">0,6 / 1,0</td><td class="v now">0,6 / 1,0</td></tr>
+          <tr><td class="p">Коммунально-складская</td><td class="v was">0,6 / 1,8</td><td class="v now">0,6 / 1,8</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>Три содержательные правки в примечаниях.</b>
+      (1) База расчёта: «территория квартала (брутто)» → <b>«территория в границах ЭПС»</b> с учётом минимально допустимого уровня обеспеченности объектами социальной инфраструктуры и сферы услуг.
+      (2) Снята оговорка «подземное сооружение не учитывается, если поверхность над ним используется под благоустройство» — осталось общее «подземные этажи не учитываются».
+      (3) Новое прим. 5: <b>значения показателей могут быть уточнены в ПЗЗ</b>. Прежде такой прямой отсылки не было — теперь ПЗЗ могут перебить приложение Б.
+      Повышение до 0,6 / 1,6 при КРТ и в радиусе 1500 м от станций скоростного внеуличного транспорта сохранено, но обвешано условиями (проницаемость кварталов, короткие пешеходные маршруты, инсоляция, доступность соцобъектов, озеленение, БДД, пожбез).
+    </div>
+
+    <h3>Прочее по жилой застройке</h3>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Параметр</th><th class="was">2016</th><th class="now">2026</th></tr></thead>
+        <tbody>
+          <tr><td class="p">Бытовые разрывы</td><td class="v was">2–3 эт. — 15 м · 4 эт. — 20 м · торец — 10 м</td><td class="v now">те же, п. 6.4.23</td></tr>
+          <tr><td class="p">Категории населённых пунктов</td><td class="v was">«Группы», табл. 4.1</td><td class="v now">«Категории», табл. 5.1 — значения те же (1000 / 250 / 100 / 50)</td></tr>
+          <tr><td class="p">Площадь жилых зон на 1000 чел.</td><td class="v was">нормы нет в СП 42</td><td class="v now">табл. 6.2: ИЖС 20/40 · малоэтажная 10/10 · среднеэтажная 8 · многоэтажная 7 га</td></tr>
+          <tr><td class="p">Средне- и многоэтажная застройка в сельских НП</td><td class="v was">не регламентировано отдельно</td><td class="v now">п. 6.2.10: допускается <b>только</b> при проектировании УДС, вело- и пешеходной инфраструктуры и расчёте соцобъектов <b>по городским нормативам</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ОЗЕЛЕНЕНИЕ ============ -->
+<section id="zelen">
+  <div class="wrap">
+    <div class="shead"><div class="snum">06</div><h2>Озеленение и рекреация</h2></div>
+    <p class="sub">Раздел 9 (2016) → раздел 10 + приложение М (2026). Здесь настоящие числовые сдвиги, причём в обе стороны.</p>
+
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Показатель</th><th class="was">2016 (табл. 9.2, п. 9.27)</th><th class="now">2026 (прил. М, табл. М.1)</th><th>Дельта</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p">Озеленённые территории общего пользования, городские НП</td>
+            <td class="v was">крупнейшие/крупные/большие 10<br>средние 7<br>малые 8 (10)</td>
+            <td class="v now">≥ 10 м²/чел.<br><span style="color:var(--muted)">единая норма</span></td>
+            <td class="d"><span class="up">Ужесточение</span> для средних и малых НП</td>
+          </tr>
+          <tr>
+            <td class="p">То же, сельские НП</td>
+            <td class="v was">12 м²/чел.</td>
+            <td class="v now">≥ 6 м²/чел.</td>
+            <td class="d"><span class="down">Вдвое ниже</span></td>
+          </tr>
+          <tr>
+            <td class="p">Дополнительно в границах ППТ жилых зон</td>
+            <td class="v was">6 м²/чел. (жилых районов)</td>
+            <td class="v now">≥ 6 м²/чел., в т.ч. <b>1,7 м²/чел. по СП 476.1325800</b></td>
+            <td class="d">Уточнено и увязано с СП 476</td>
+          </tr>
+          <tr><td class="p">Пляж морской</td><td class="v was">5 м²/посетителя</td><td class="v now">≥ 3 м²/посетителя</td><td class="d"><span class="down">−40 %</span></td></tr>
+          <tr><td class="p">Пляж речной, озёрный</td><td class="v was">8 м²/посетителя</td><td class="v now">≥ 5 м²/посетителя</td><td class="d"><span class="down">−37 %</span></td></tr>
+          <tr><td class="p">Пляж детский</td><td class="v was">5 м²/посетителя</td><td class="v now">≥ 4 м²/посетителя</td><td class="d"><span class="down">−20 %</span></td></tr>
+          <tr><td class="p">Пляж специализированный (ОДА)</td><td class="v was">8–12 м²/посетителя</td><td class="v now">8–10 м²/посетителя</td><td class="d"><span class="down">Верхняя граница снижена</span></td></tr>
+          <tr><td class="p">Акватория для купания</td><td class="v was">нормы нет</td><td class="v now">проточный ≥ 5 м²/чел.<br>непроточный ≥ 10 м²/чел.</td><td class="d">Новое</td></tr>
+          <tr><td class="p">Города-курорты</td><td class="v was">увеличение не более чем на 50 %</td><td class="v now">увеличение <b>не менее чем на 50 %</b>, с учётом временного населения</td><td class="d"><span class="up">Потолок стал полом</span></td></tr>
+          <tr><td class="p">Доступность парков</td><td class="v was">городские 30 мин, районные 20 мин на ОПТ</td><td class="v now">крупный парк 30–45 мин на ОПТ<br>малый парк 20 мин (до 2 км)<br>сквер 400 м пешком (800 м при малоэтажной)<br>бульвар 400 м</td><td class="d">Развёрнуто и типизировано по ГОСТ Р 71473</td></tr>
+          <tr><td class="p">Обеспеченность парками</td><td class="v was">нормы нет</td><td class="v now">≥ 1 объект на 50 тыс. чел.; ≥ 1 на НП с населением от 10 тыс. чел.</td><td class="d">Новое</td></tr>
+          <tr><td class="p">Климатическая корректировка</td><td class="v was">тундра/лесотундра до 2 м²/чел.; пустыни −20…30 %; степь +10…20 %</td><td class="v now">общее «± не более 20 %» при обосновании в НГП/РНГП/МНГП по СП 131.13330</td><td class="d"><span class="eq">Упрощено</span>, детальная сетка снята</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>Новая логика приложения М.</b> Оно объединяет то, что раньше жило в разных местах: озеленение, пляжи,
+      гостиницы, отели, мотели, пансионаты, базы отдыха, турбазы, <b>глэмпинги</b> (новый тип), кемпинги, детские лагеря.
+      Прим. 3 задаёт правило для генплана: площадь зон озеленённых территорий общего пользования должна быть
+      <b>не менее суммарной площади парков, садов, скверов и бульваров</b>, посчитанной по нормативной потребности и доступности.
+    </div>
+  </div>
+</section>
+
+<!-- ============ ИНЖЕНЕРКА ============ -->
+<section id="inzh">
+  <div class="wrap">
+    <div class="shead"><div class="snum">07</div><h2>Инженерная инфраструктура</h2></div>
+    <p class="sub">Раздел 12 (2016) → раздел 7 (2026). Числа в таблицах расстояний сохранены полностью, но таблицы вынесены в приложения, а состав раздела расширен.</p>
+
+    <div class="diff">
+      <div class="card now">
+        <span class="tag">Появилось · 2026</span>
+        <ul>
+          <li><b>Система утилизации снежных масс</b> (п. 7.29) — «сухие» снегосвалки по ГОСТ Р 59205-2021, п. 9.4; снегоплавильные пункты по СП 32.13330.2018, п. 6.11; очистные на площадке по взвешенным веществам и нефтепродуктам, с условием отказа от них при близости к сетям водоотведения и согласовании с надзором</li>
+          <li>Раздел прямо назван «…<b>и обращения с отходами</b>» — блок объектов накопления, обработки, утилизации, обезвреживания и размещения отходов с табл. 7.4</li>
+          <li>Подраздел «Сети связи» выделен явно</li>
+          <li>Система водоотведения поверхностных сточных вод — как самостоятельный подраздел</li>
+        </ul>
+      </div>
+      <div class="card was">
+        <span class="tag">Переехало из тела в приложения</span>
+        <ul>
+          <li>Табл. 12.5 → <b>приложение Д</b>: минимальные расстояния по горизонтали от подземных сетей до конструктивных элементов зданий, строений, сооружений — <b>значения не изменились</b> (водопровод 5 / 3 / 4 / 2,8 / 2 / 1 / 1 / 2 / 3 и т.д.)</li>
+          <li>Табл. 12.6 → <b>приложение Е</b>: расстояния между соседними подземными сетями</li>
+          <li>Приложение К (нормы накопления ТКО) → <b>приложение Ж</b></li>
+        </ul>
+        <p style="margin-top:10px">В шапку приложения Д добавлены <b>шумозащитные экраны</b> в колонку «фундаменты ограждений, эстакад, опор». Кабели связи и кабельная канализация теперь идут не числом, а отсылкой на [44], СП 76.13330, СП 18.13330.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ПРИЛОЖЕНИЯ ============ -->
+<section id="prilozh">
+  <div class="wrap">
+    <div class="shead"><div class="snum">08</div><h2>Приложения: полная перелитеровка</h2></div>
+    <p class="sub">Буквы сдвинулись почти все. Если в вашей документации есть ссылка вида «приложение Ж СП 42.13330.2016» — она теперь указывает не туда.</p>
+
+    <div class="rail">
+      <div class="rail-head">
+        <div class="c1">2016</div><div></div><div class="c3">2026</div>
+      </div>
+      <div class="rail-row gone">
+        <div class="c1"><span class="k">А</span>Нормативные показатели малоэтажной жилой застройки</div><div class="c2">✕</div>
+        <div class="c3">Исключено<span class="chip gone">нет аналога</span></div>
+      </div>
+      <div class="rail-row new">
+        <div class="c1" style="color:var(--neutral-4)">—</div><div class="c2">＋</div>
+        <div class="c3"><span class="k">А</span>Соотношение категорий земель, видов функциональных и территориальных зон<span class="chip new">новое</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">Б</span>Показатели плотности застройки функциональных зон</div><div class="c2">→</div>
+        <div class="c3"><span class="k">Б</span>То же<span class="chip rework">+ курортная зона, + отсылка к ПЗЗ</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">Г</span>Площадь и размеры земельных участков складов</div><div class="c2">→</div>
+        <div class="c3"><span class="k">В</span>То же<span class="chip rework">буква сменилась</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">Д</span>Нормы расчёта учреждений, организаций и предприятий обслуживания</div><div class="c2">→</div>
+        <div class="c3"><span class="k">Л</span>Объекты соц. инфраструктуры, адм.-деловые, торговля, питание, быт, похоронного назначения<span class="chip rework">полностью переписано</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">Ж</span>Нормы расчёта стоянок автомобилей</div><div class="c2">→</div>
+        <div class="c3"><span class="k">И</span>Нормы расчёта приобъектных стоянок автомобилей<span class="chip rework">буква сменилась</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">И</span>Нормы земельных участков гаражей и парков транспортных средств</div><div class="c2">→</div>
+        <div class="c3"><span class="k">К</span>Земельные участки для объектов транспортной инфраструктуры<span class="chip rework">буква сменилась</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">К</span>Нормы накопления коммунальных отходов</div><div class="c2">→</div>
+        <div class="c3"><span class="k">Ж</span>Количество коммунальных отходов<span class="chip rework">буква сменилась</span></div>
+      </div>
+      <div class="rail-row rework">
+        <div class="c1"><span class="k">Л</span>Укрупнённые показатели электропотребления</div><div class="c2">→</div>
+        <div class="c3"><span class="k">Г</span>То же<span class="chip rework">буква сменилась</span></div>
+      </div>
+      <div class="rail-row gone">
+        <div class="c1"><span class="k">М</span>Уширение полосы движения на кривых в плане</div><div class="c2">✕</div>
+        <div class="c3">Исключено → <b>СП 396.1325800.2018, п. 5.6</b><span class="chip gone">делегировано</span></div>
+      </div>
+      <div class="rail-row gone">
+        <div class="c1"><span class="k">Н</span>Форма баланса использования территории муниципального образования</div><div class="c2">✕</div>
+        <div class="c3">Исключено<span class="chip gone">нет аналога</span></div>
+      </div>
+      <div class="rail-row gone">
+        <div class="c1"><span class="k">П</span>Земельные участки зданий органов внутренних дел</div><div class="c2">→</div>
+        <div class="c3">Влито в <span class="k">Л</span><span class="chip rework">поглощено</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">12.5</span>Расстояния от подземных сетей <span style="color:var(--muted);font-size:12px">(было в теле раздела)</span></div><div class="c2">→</div>
+        <div class="c3"><span class="k">Д</span>Минимальные расстояния по горизонтали от подземных сетей<span class="chip keep">значения те же</span></div>
+      </div>
+      <div class="rail-row keep">
+        <div class="c1"><span class="k">12.6</span>Расстояния между сетями <span style="color:var(--muted);font-size:12px">(было в теле раздела)</span></div><div class="c2">→</div>
+        <div class="c3"><span class="k">Е</span>Расстояния между соседними подземными сетями<span class="chip keep">значения те же</span></div>
+      </div>
+      <div class="rail-row new">
+        <div class="c1" style="color:var(--neutral-4)">—</div><div class="c2">＋</div>
+        <div class="c3"><span class="k">М</span>Объекты рекреационной инфраструктуры<span class="chip new">новое</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Приложение Л — это главный рабочий инструмент новой редакции.</b> Оно объединило старые приложения Д и П
+      и разрослось на порядок: единая таблица «объект → нормативная потребность → территориальная доступность →
+      размер земельного участка» с 29 сносками, отсылающими к отраслевым методикам (Минздрав, Минпросвещения,
+      Минкультуры, Минспорт). ДОО и школы: 500 м пешеходной доступности в городе, 800 м в стеснённых условиях,
+      1000 м в селе — числа как в табл. 10.1 (2016), но термин «радиус обслуживания» заменён на «территориальную доступность».
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЧТО ДЕЛАТЬ ============ -->
+<section id="chto-delat">
+  <div class="wrap">
+    <div class="shead"><div class="snum">09</div><h2>Что делать проектировщику</h2></div>
+    <p class="sub">Короткий разбор по действиям, а не по разделам.</p>
+
+    <div class="checks">
+      <div class="check">
+        <h4>Перепривязать ссылки в шаблонах</h4>
+        <p>Все ссылки на приложения СП 42 в ПЗ, штампах, спецификациях и рабочих шаблонах теперь указывают на другие буквы. Особенно: Ж → И, И → К, К → Ж, Л → Г, Д → Л.</p>
+        <span class="why">Приоритет: высокий · трудоёмкость: низкая</span>
+      </div>
+      <div class="check">
+        <h4>Пересобрать расчёт доступности</h4>
+        <p>Буферы-окружности заменить сетевым расчётом по пешеходному графу: п. 8.84 и отсчёт от границы ЗУ по табл. 8.12. Это меняет и посадку остановок, и обоснование в ППТ.</p>
+        <span class="why">Приоритет: высокий · трудоёмкость: высокая</span>
+      </div>
+      <div class="check">
+        <h4>Завести расчётные ТС и траектории разворота</h4>
+        <p>«15 × 15 м» больше нет. Нужны шаблоны swept path под мусоровоз, уборочную технику, пожарный автомобиль и подвижной состав ОПТ, привязанные к СП 396.1325800.</p>
+        <span class="why">Приоритет: высокий · трудоёмкость: средняя</span>
+      </div>
+      <div class="check">
+        <h4>Проверить НГП / РНГП / МНГП вашего субъекта</h4>
+        <p>Почти каждый параметр в СП 42.13330.2026 начинается с «в соответствии с НГП, РНГП, МНГП». СП стал резервным источником. Если региональные нормативы писались под редакцию 2016 года — возникнет расхождение.</p>
+        <span class="why">Приоритет: высокий · трудоёмкость: низкая</span>
+      </div>
+      <div class="check">
+        <h4>Пересчитать тротуары на реконструкции</h4>
+        <p>Порог 1,2 м → 2,0 м (прим. 7 к табл. 8.5) и проезды: основные 1,0 → 2,0 м, второстепенные 0,75 → 1,0 м (табл. 8.9). На узких поперечниках это ощутимо.</p>
+        <span class="why">Приоритет: средний · трудоёмкость: средняя</span>
+      </div>
+      <div class="check">
+        <h4>Внести островки безопасности в типовые решения</h4>
+        <p>П. 8.57: регулируемый переход через 4 полосы или &gt; 12 м, нерегулируемый &gt; 8 м. Заужение полос в створе — не ниже 3,0 м (улицы) и 3,25 м (дороги).</p>
+        <span class="why">Приоритет: средний · трудоёмкость: низкая</span>
+      </div>
+      <div class="check">
+        <h4>Заложить зарядную инфраструктуру</h4>
+        <p>П. 8.131–8.139 — фактически новый обязательный слой в ППТ и в проектах стоянок, ТПУ и объектов дорожного сервиса.</p>
+        <span class="why">Приоритет: средний · трудоёмкость: средняя</span>
+      </div>
+      <div class="check">
+        <h4>Проверить отступ до жилья в новых поперечниках</h4>
+        <p>П. 6.4.17: 50 м до линии отступа от границ ЗУ + 20 м от красных линий до стен, а шумозащитный экран — только при доказанной невозможности иных мер.</p>
+        <span class="why">Приоритет: средний · трудоёмкость: средняя</span>
+      </div>
+    </div>
+
+    <div class="note flag" style="margin-top:32px">
+      <b>Оговорки к разбору.</b> Анализ выполнен по двум текстам: СП 42.13330.2016 (с изменениями № 1–4) и предоставленному
+      тексту СП 42.13330.2026. Текст 2026 г. — распознанный (OCR): в теле документа местами встречается колонтитул
+      «СП 42.13330.2025», сбоит вёрстка широких таблиц, а первая страница (приказ) не распозналась. Это дефекты
+      распознавания, а не документа. Перед применением в проектной документации сверьтесь с официальным изданием.
+      Разбор не претендует на полноту по всем 16 разделам — упор сделан на транспорт, УДС, плотность, озеленение
+      и приложения; блоки водного, воздушного, железнодорожного транспорта, отходов, охраны среды и ЧС разобраны обзорно.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fl">
+    <div>
+      <a href="/" class="brandf">
+        <img class="for-dark" src="/logo-lockup-white.png" alt="ABR MOVE">
+        <img class="for-light" src="/logo-lockup.png" alt="ABR MOVE">
+      </a>
+      <p style="margin:10px 0 0">Разбор редакций СП 42.13330 · <span style="font-family:'JetBrains Mono',monospace">2016 → 2026</span></p>
+    </div>
+    <div style="max-width:44ch">
+      <p style="margin:0">Источники: СП 42.13330.2016 «СНиП 2.07.01-89* Градостроительство. Планировка и застройка городских
+      и сельских поселений» (изм. № 1–4) и СП 42.13330.2026 «Градостроительство. Планировка и застройка территорий»
+      (приказ Минстроя России от 11.06.2026 № 368/пр, введён 12.07.2026).</p>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="wrap">
+      <span>© 2026 ABR | MOVE, Ярослав Абрамов</span>
+      <a href="/" class="back">← На сайт abrmove.ru</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var metaTheme = document.querySelector('meta[name="theme-color"]');
+  var COLORS = { dark: '#09090E', light: '#F6F7FB' };
+
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    if (metaTheme) metaTheme.setAttribute('content', COLORS[theme] || COLORS.dark);
+    btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+  }
+
+  apply(root.getAttribute('data-theme') || 'dark');
+
+  btn.addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    apply(next);
+    try{ localStorage.setItem('sp42-theme', next); }catch(e){}
+  });
+})();
+</script>
+
+</body>
+</html>
