@@ -1,0 +1,162 @@
+---
+// src/components/HeroDemo.astro
+//
+// Illustrative Profile Tracker HUD — the numbers are synthetic, computed
+// from hand-authored SVG curves, not a real survey. See docs/superpowers/
+// specs/2026-07-16-hero-profile-tracker-demo-design.md for the design.
+
+// SVG-space (viewBox "0 0 440 260") control points for the two curves.
+const designPoints = [
+  { x: 20, y: 90 },
+  { x: 80, y: 110 },
+  { x: 140, y: 150 },
+  { x: 200, y: 175 },
+  { x: 260, y: 160 },
+  { x: 320, y: 130 },
+  { x: 380, y: 115 },
+  { x: 420, y: 120 },
+];
+
+const groundPoints = [
+  { x: 20, y: 78 },
+  { x: 60, y: 100 },
+  { x: 100, y: 95 },
+  { x: 140, y: 140 },
+  { x: 180, y: 165 },
+  { x: 220, y: 190 },
+  { x: 260, y: 155 },
+  { x: 300, y: 145 },
+  { x: 340, y: 118 },
+  { x: 380, y: 100 },
+  { x: 420, y: 108 },
+];
+
+const designPointsStr = designPoints.map((p) => `${p.x},${p.y}`).join(' ');
+const groundPointsStr = groundPoints.map((p) => `${p.x},${p.y}`).join(' ');
+
+// Maps SVG x/y <-> route chainage (m) / elevation (m). Route runs
+// ПК120+00 -> ПК123+50 (350 m) left to right across the plot.
+const plotBounds = {
+  xMin: 20,
+  xMax: 420,
+  routeStartM: 12000, // "ПК120+00" as metres from a notional km 0
+  routeLengthM: 350,
+  yMin: 40,
+  yMax: 220,
+  elevAtYMin: 138.0,
+  elevAtYMax: 130.0,
+};
+
+function interpolateY(points: { x: number; y: number }[], x: number) {
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i];
+    const b = points[i + 1];
+    if (x >= a.x && x <= b.x) {
+      const t = (x - a.x) / (b.x - a.x);
+      return a.y + t * (b.y - a.y);
+    }
+  }
+  return points[points.length - 1].y;
+}
+
+function xToChainageM(x: number, bounds: typeof plotBounds) {
+  return ((x - bounds.xMin) / (bounds.xMax - bounds.xMin)) * bounds.routeLengthM;
+}
+
+function yToElevation(y: number, bounds: typeof plotBounds) {
+  const t = (y - bounds.yMin) / (bounds.yMax - bounds.yMin);
+  return bounds.elevAtYMin + t * (bounds.elevAtYMax - bounds.elevAtYMin);
+}
+
+function formatStation(meters: number, bounds: typeof plotBounds) {
+  const totalM = bounds.routeStartM + meters;
+  const picket = Math.floor(totalM / 100);
+  const offset = totalM - picket * 100;
+  return `ПК ${picket}+${offset.toFixed(2).padStart(5, '0')}`;
+}
+
+function formatSignedFixed(v: number, digits: number) {
+  return `${v >= 0 ? '+' : ''}${v.toFixed(digits)}`;
+}
+
+function slopePerMille(points: { x: number; y: number }[], x: number, bounds: typeof plotBounds) {
+  const dx = 6;
+  const x0 = Math.max(bounds.xMin, x - dx);
+  const x1 = Math.min(bounds.xMax, x + dx);
+  const elev0 = yToElevation(interpolateY(points, x0), bounds);
+  const elev1 = yToElevation(interpolateY(points, x1), bounds);
+  const dxMeters = xToChainageM(x1, bounds) - xToChainageM(x0, bounds);
+  return ((elev1 - elev0) / dxMeters) * 1000;
+}
+
+function distanceToNextStationM(meters: number, bounds: typeof plotBounds) {
+  const totalM = bounds.routeStartM + meters;
+  const offset = totalM % 100;
+  return 100 - offset;
+}
+
+// Initial marker position: horizontal midpoint of the plot.
+const initialX = (plotBounds.xMin + plotBounds.xMax) / 2;
+const initialDesignY = interpolateY(designPoints, initialX);
+const initialGroundY = interpolateY(groundPoints, initialX);
+const initialMeters = xToChainageM(initialX, plotBounds);
+const initialDesignElev = yToElevation(initialDesignY, plotBounds);
+const initialGroundElev = yToElevation(initialGroundY, plotBounds);
+const initialWorking = initialGroundElev - initialDesignElev;
+const initialSlope = slopePerMille(designPoints, initialX, plotBounds);
+const initialDist = distanceToNextStationM(initialMeters, plotBounds);
+---
+
+<div class="relative border border-line bg-surface" aria-hidden="true">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-line">
+    <span class="font-mono text-[10px] tracking-widest2 uppercase text-gray-2">ABR | Profile Tracker</span>
+    <span class="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-widest2 uppercase text-accent">
+      <span class="relative flex w-1.5 h-1.5">
+        <span class="hero-demo-pulse absolute inset-0 rounded-full bg-accent"></span>
+        <span class="relative rounded-full w-1.5 h-1.5 bg-accent"></span>
+      </span>
+      Слежение включено
+    </span>
+  </div>
+
+  <div class="relative px-4 py-4">
+    <svg id="hero-demo-svg" viewBox="0 0 440 260" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <pattern id="hero-demo-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1C1F2E" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="440" height="260" fill="url(#hero-demo-grid)" />
+
+      <polyline points={groundPointsStr} fill="none" stroke="#42466A" stroke-width="1.5" />
+      <polyline points={designPointsStr} fill="none" stroke="#22D3EE" stroke-width="2" />
+
+      <line id="hero-demo-cursor-line" x1={initialX} y1="20" x2={initialX} y2="240" stroke="#888BA8" stroke-width="1" stroke-dasharray="4 4" />
+      <circle id="hero-demo-marker" cx={initialX} cy={initialDesignY} r="4" fill="#22D3EE" stroke="#09090E" stroke-width="2" />
+    </svg>
+
+    <div id="hero-demo-readout" class="absolute bottom-3 right-3 bg-elevated border border-line px-3 py-2.5 font-mono text-[10px] leading-relaxed text-gray-2 min-w-[168px]">
+      <div class="flex items-center justify-between gap-4 text-white font-medium mb-1.5">
+        <span id="hero-demo-station">{formatStation(initialMeters, plotBounds)}</span>
+      </div>
+      <div class="flex items-center justify-between gap-4"><span>Отметка проекта</span><span id="hero-demo-elev-design" class="text-gray-1">{initialDesignElev.toFixed(2)}</span></div>
+      <div class="flex items-center justify-between gap-4"><span>Отметка сущ.</span><span id="hero-demo-elev-ground" class="text-gray-1">{initialGroundElev.toFixed(2)}</span></div>
+      <div class="flex items-center justify-between gap-4"><span>Рабочая отметка</span><span id="hero-demo-elev-working" class="text-gray-1">{formatSignedFixed(initialWorking, 2)}</span></div>
+      <div class="flex items-center justify-between gap-4"><span>Уклон, ‰</span><span id="hero-demo-slope" class="text-gray-1">{initialSlope.toFixed(1)}</span></div>
+      <div class="flex items-center justify-between gap-4"><span>До ПК</span><span id="hero-demo-dist" class="text-gray-1">{initialDist.toFixed(2)} м</span></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes hero-demo-ping {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  .hero-demo-pulse {
+    animation: hero-demo-ping 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-demo-pulse { animation: none; }
+  }
+</style>
