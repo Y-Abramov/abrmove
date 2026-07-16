@@ -4,46 +4,46 @@
     {
       "id": 0,
       "subject": "Task 1: News feature — content collection, component, JSON endpoint",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Add a news content collection, a News.astro component with a real empty state, and a /news.json endpoint.\n\n**Files:**\n- Create: src/content/news/.gitkeep\n- Modify: src/content.config.ts\n- Create: src/components/News.astro\n- Create: src/pages/news.json.ts\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- dist/news.json exists and contains [].\n- News.astro with zero entries shows the empty-state line, no card list.\n\n**Verify:** cd abr-move && npm run build && cat dist/news.json -> exits 0, prints [].\n\n```json:metadata\n{\"files\": [\"abr-move/src/content/news/.gitkeep\", \"abr-move/src/content.config.ts\", \"abr-move/src/components/News.astro\", \"abr-move/src/pages/news.json.ts\"], \"verifyCommand\": \"cd abr-move && npm run build && cat dist/news.json\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"dist/news.json contains []\", \"empty-state text renders with zero entries\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Building news feature (collection, component, endpoint)"
     },
     {
       "id": 1,
       "subject": "Task 2: YouTubeCarousel.astro — placeholder component",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Three-card 'coming soon' placeholder section, no fabricated video data, future data shape documented in a comment.\n\n**Files:**\n- Create: src/components/YouTubeCarousel.astro\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Renders three cards with play-icon placeholder + 'Скоро' label, no fake titles/links.\n\n**Verify:** cd abr-move && npm run build -> exits 0.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/YouTubeCarousel.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"three placeholder cards, no fabricated data\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Building YouTubeCarousel placeholder component"
     },
     {
       "id": 2,
       "subject": "Task 3: Split Solutions.astro into Robur / Civil groups",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Extract ModuleCard.astro, render existing 5-module data as two labeled groups (Topomatic Robur / Autodesk Civil 3D) instead of one flat grid.\n\n**Files:**\n- Create: src/components/ModuleCard.astro\n- Modify: src/components/Solutions.astro (full replacement)\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Robur group: RoadStyle, Profile Tracker, Model Manager, Width Import (4 cards).\n- Civil group: Slab Designer, Width Import (2 cards).\n- CTA banner appears once after both groups, links to #downloads.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Visual check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/ModuleCard.astro\", \"abr-move/src/components/Solutions.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"Robur group has 4 cards\", \"Civil group has 2 cards\", \"single CTA banner after both groups\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Splitting Solutions into Robur/Civil groups"
     },
     {
       "id": 3,
       "subject": "Task 4: About.astro — swap support block for CTA buttons",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Replace About's right-column support block with Модули (#solutions) and Подробнее (GitHub profile) CTAs.\n\n**Files:**\n- Modify: src/components/About.astro:81-104\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Right column shows stats grid unchanged, then one paragraph, then Модули (btn-accent, #solutions) and Подробнее (btn-outline, https://github.com/Y-Abramov, new tab) buttons.\n- Old Поддержать/Telegram links gone from About.astro.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Visual check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/About.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"Модули and Подробнее CTAs present\", \"old support links removed\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Swapping About.astro support block for CTAs"
     },
     {
       "id": 4,
       "subject": "Task 5: Footer.astro — add Поддержать button",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Add a support-trigger button to the Контакты column, reusing existing .support-btn/.heart-icon CSS.\n\n**Files:**\n- Modify: src/components/Footer.astro:53-67\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Контакты column shows Telegram/GitHub/VK/Email then a Поддержать button with id=support-btn.\n- Hover triggers .support-btn:hover .heart-icon treatment from global.css:104-108.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Visual + click check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Footer.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"support button with id=support-btn present in footer\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Adding support button to Footer.astro"
     },
     {
       "id": 5,
       "subject": "Task 6: Wire everything into index.astro, update Header nav",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [0, 1, 2, 3, 4],
       "description": "**Goal:** Compose full page from all components, drop stub hero/fetch/inline markup, keep QR modal working via Footer's button, update Header nav label.\n\n**Files:**\n- Modify: src/components/Header.astro:5\n- Modify: src/pages/index.astro (full replacement)\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Page order: Header, Hero, About, Solutions (Robur/Civil), News (empty state), YouTubeCarousel (3 placeholders), Downloads, Footer.\n- No 'Сайт в разработке' text anywhere.\n- Header nav shows Новости -> #news, scrolls to News section.\n- Footer Поддержать button opens QR modal; Escape/backdrop/close button all close it.\n- dist/news.json still returns [].\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual check via npm run dev: scroll whole page, click every nav link, open/close support modal from footer.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Header.astro\", \"abr-move/src/pages/index.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"correct section order\", \"no construction-stub text\", \"nav Новости scrolls to #news\", \"footer support button opens/closes modal\", \"news.json still []\"], \"modelTier\": \"standard\"}\n```",
       "activeForm": "Wiring homepage composition into index.astro"
     }
   ],
-  "lastUpdated": "2026-07-16T00:00:00Z"
+  "lastUpdated": "2026-07-16T16:45:00Z"
 }
