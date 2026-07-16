@@ -1,0 +1,29 @@
+{
+  "planPath": "docs/superpowers/plans/2026-07-16-hero-profile-tracker-demo.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 1: Build HeroDemo.astro — static structure with server-computed values",
+      "status": "pending",
+      "description": "**Goal:** Create the HUD panel component with correct, server-rendered chainage/elevation/slope numbers and no client JS yet.\n\n**Files:**\n- Create: src/components/HeroDemo.astro\n\n**Acceptance Criteria:**\n- npm run build succeeds with no errors.\n- Panel shows header row, SVG with two polylines over a grid, dashed cursor line, marker circle, readout box.\n- Readout shows: station 'ПК 121+75.00', Отметка проекта '132.22', Отметка сущ. '131.33', Рабочая отметка '-0.89', Уклон ‰ '12.7', До ПК '25.00 м'.\n\n**Verify:** cd abr-move && npm run build -> exits 0, no diagnostics.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/HeroDemo.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"readout shows ПК 121+75.00 / 132.22 / 131.33 / -0.89 / 12.7 / 25.00 м\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Building HeroDemo.astro static structure"
+    },
+    {
+      "id": 1,
+      "subject": "Task 2: Add motion — auto-drift, hover-follow, reduced-motion",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Animate the marker: idle auto-drift loop (~8s pass, eased, pauses at ends), mouse-follow on hover, prefers-reduced-motion disables auto-drift only.\n\n**Files:**\n- Modify: src/components/HeroDemo.astro (append script block)\n\n**Acceptance Criteria:**\n- Marker auto-drifts left-right-left over ~8s passes when motion allowed and idle.\n- Hovering the SVG makes the marker follow mouse x, readout updates live.\n- Leaving the SVG resumes auto-drift after ~300ms.\n- prefers-reduced-motion: reduce disables auto-drift but hover-follow still works.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual check via npm run dev + devtools reduced-motion emulation.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/HeroDemo.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"auto-drift loops ~8s each way\", \"hover-follow tracks pointer x\", \"reduced-motion disables auto-drift, hover-follow still works\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Adding drift/hover/reduced-motion animation script"
+    },
+    {
+      "id": 2,
+      "subject": "Task 3: Wire HeroDemo into Hero.astro, two-column layout",
+      "status": "pending",
+      "blockedBy": [1],
+      "description": "**Goal:** Render HeroDemo inside Hero.astro as a two-column desktop layout; remove old full-width watermark/road-SVG; keep mobile (<lg) unchanged.\n\n**Files:**\n- Modify: src/components/Hero.astro (full replacement, see plan)\n\n**Acceptance Criteria:**\n- lg+ shows two columns: copy left, HeroDemo right.\n- Below lg, HeroDemo root has display:none (hidden lg:block), not just visually hidden.\n- Giant watermark logo removed from page entirely.\n- Road-SVG lines appear only behind HeroDemo column, opacity <= 0.04.\n- npm run build succeeds.\n- Visual check at 375px/1024px/1440px: text/CTAs/stats unchanged aside from new right column at desktop widths.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual visual diff via npm run dev at 375/1024/1440px.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Hero.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"two-column layout at lg+\", \"HeroDemo hidden below lg via display:none\", \"watermark logo removed\", \"road svg opacity <= 0.04 behind HeroDemo only\", \"build succeeds\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Wiring HeroDemo into Hero.astro two-column layout"
+    }
+  ],
+  "lastUpdated": "2026-07-16T00:00:00Z"
+}
