@@ -1,0 +1,40 @@
+---
+interface Props {
+  mod: {
+    num: string;
+    name: string;
+    desc: string;
+    platform: string;
+    icon: string;
+    href: string;
+  };
+}
+const { mod } = Astro.props;
+---
+
+<a href={mod.href} class="group bg-base p-7 flex flex-col gap-5 card-hover cursor-pointer">
+  <!-- Number + platform -->
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] tracking-widest2 text-gray-3 uppercase">{mod.platform}</span>
+    <span class="font-mono text-xs text-gray-4">{mod.num}</span>
+  </div>
+
+  <!-- Icon -->
+  <div class="text-gray-3 group-hover:text-accent transition-colors duration-200">
+    <Fragment set:html={mod.icon} />
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 flex flex-col gap-2">
+    <h3 class="font-bold text-white text-sm group-hover:text-gray-1 transition-colors">{mod.name}</h3>
+    <p class="text-xs text-gray-2 leading-relaxed">{mod.desc}</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="flex items-center justify-between pt-3 border-t border-line">
+    <span class="font-mono text-[10px] text-gray-4 group-hover:text-gray-3 transition-colors">Подробнее</span>
+    <svg class="text-gray-4 group-hover:text-accent transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+    </svg>
+  </div>
+</a>
