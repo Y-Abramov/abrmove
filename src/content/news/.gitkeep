@@ -1,0 +1,2 @@
+# .md files here must match the `news` schema in src/content.config.ts:
+# title (string), date (date), summary (string), link (url, optional), draft (bool, optional).
