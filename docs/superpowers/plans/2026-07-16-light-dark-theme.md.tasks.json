@@ -1,0 +1,53 @@
+{
+  "planPath": "docs/superpowers/plans/2026-07-16-light-dark-theme.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 1: CSS variable token system",
+      "status": "pending",
+      "description": "**Goal:** Every color token becomes a CSS variable with dark (default) and light values; global.css's own hardcoded hex switches to the matching variable.\n\n**Files:**\n- Modify: src/styles/global.css (full replacement)\n- Modify: tailwind.config.mjs (full replacement)\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- With no data-theme override, site renders identical to before (dark values copied verbatim).\n- Setting data-theme=light in devtools recolors site-wide without reload.\n\n**Verify:** cd abr-move && npm run build -> exits 0.\n\n```json:metadata\n{\"files\": [\"abr-move/src/styles/global.css\", \"abr-move/tailwind.config.mjs\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"dark mode unchanged\", \"data-theme=light recolors site\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Building CSS variable token system"
+    },
+    {
+      "id": 1,
+      "subject": "Task 2: Blocking theme-init script in Layout.astro",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** data-theme set on <html> before first paint from localStorage, defaulting to dark.\n\n**Files:**\n- Modify: src/layouts/Layout.astro\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- With localStorage abr-move-theme=light, reload never flashes dark first.\n- With no stored preference, html has data-theme=dark immediately.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/layouts/Layout.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"no flash of wrong theme on reload\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Adding blocking theme-init script"
+    },
+    {
+      "id": 2,
+      "subject": "Task 3: Header.astro toggle button, dual logo, rename",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Replace Скачать CTA with sun/moon toggle visible at every breakpoint; dual logo variants; fix scroll-spy hardcoded color; rename hover:text-white to hover:text-gray-1.\n\n**Files:**\n- Modify: src/components/Header.astro (full replacement)\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Скачать pill CTA gone from header (mobile dropdown button untouched).\n- Sun/moon toggle between nav and hamburger, visible mobile and desktop.\n- Click flips data-theme, updates theme-color meta, persists to localStorage.\n- Both logo images in DOM, only one visible per theme.\n- Active nav link uses var(--color-accent), not hardcoded cyan.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Header.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"toggle button present and functional\", \"dual logo present\", \"scroll-spy uses theme-aware color\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Building Header theme toggle and dual logo"
+    },
+    {
+      "id": 3,
+      "subject": "Task 4: Footer.astro dual logo, rename",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Same dark/light logo swap as header; rename hover:text-white to hover:text-gray-1.\n\n**Files:**\n- Modify: src/components/Footer.astro (full replacement)\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Both logo images in DOM, only one visible per theme.\n- No text-white references remain in Footer.astro.\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual check in Task 6.\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Footer.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"dual logo present\", \"no text-white remains\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Adding Footer dual logo and rename"
+    },
+    {
+      "id": 4,
+      "subject": "Task 5: Rename text-white to text-gray-1 in remaining components",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Every remaining live text-white becomes text-gray-1; drop redundant group-hover:text-gray-1 in ModuleCard/News/Downloads; leave the two ЮMoney button spans in index.astro untouched.\n\n**Files:**\n- Modify: src/components/Hero.astro\n- Modify: src/components/About.astro\n- Modify: src/components/Solutions.astro\n- Modify: src/components/ModuleCard.astro\n- Modify: src/components/News.astro\n- Modify: src/components/YouTubeCarousel.astro\n- Modify: src/components/Downloads.astro\n- Modify: src/pages/index.astro\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- grep -rn text-white across the 7 component files returns nothing.\n- grep -n text-white src/pages/index.astro returns exactly 2 matches (ЮMoney button).\n\n**Verify:** cd abr-move && npm run build && grep -rn \"text-white\" src/components/Hero.astro src/components/About.astro src/components/Solutions.astro src/components/ModuleCard.astro src/components/News.astro src/components/YouTubeCarousel.astro src/components/Downloads.astro; grep -n \"text-white\" src/pages/index.astro\n\n```json:metadata\n{\"files\": [\"abr-move/src/components/Hero.astro\", \"abr-move/src/components/About.astro\", \"abr-move/src/components/Solutions.astro\", \"abr-move/src/components/ModuleCard.astro\", \"abr-move/src/components/News.astro\", \"abr-move/src/components/YouTubeCarousel.astro\", \"abr-move/src/components/Downloads.astro\", \"abr-move/src/pages/index.astro\"], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"no text-white in 7 component files\", \"exactly 2 text-white matches in index.astro (YuMoney button)\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Renaming text-white to text-gray-1"
+    },
+    {
+      "id": 5,
+      "subject": "Task 6: Verify whole site in both themes",
+      "status": "pending",
+      "blockedBy": [1, 2, 3, 4],
+      "description": "**Goal:** Confirm theme toggle works end-to-end and dark mode is unregressed.\n\n**Files:** none (verification only; fix forward in the relevant file if something's broken).\n\n**Acceptance Criteria:**\n- npm run build succeeds.\n- Dark mode identical to before this plan.\n- Toggle switches whole page to light instantly: bg, text, borders, both logos, amber/emerald/violet tags, accent buttons, active-nav underline, hover states.\n- Reload after toggling to light stays light, no dark flash.\n- Toggle visible/clickable at 375px viewport.\n- QR/YuMoney modal opens/closes in both themes, brand-purple button stays fixed purple.\n- dist/news.json still returns [].\n\n**Verify:** cd abr-move && npm run build -> exits 0. Manual walkthrough via npm run dev at 375px and 1440px, toggling theme at each.\n\n```json:metadata\n{\"files\": [], \"verifyCommand\": \"cd abr-move && npm run build\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"dark mode unregressed\", \"toggle recolors entire page\", \"no flash on reload\", \"toggle visible on mobile\", \"modal works both themes\", \"news.json still []\"], \"modelTier\": \"standard\"}\n```",
+      "activeForm": "Verifying site in both themes"
+    }
+  ],
+  "lastUpdated": "2026-07-16T00:00:00Z"
+}
