@@ -160,3 +160,156 @@ const initialDist = distanceToNextStationM(initialMeters, plotBounds);
     .hero-demo-pulse { animation: none; }
   }
 </style>
+
+<script define:vars={{ designPoints, groundPoints, plotBounds }}>
+  function interpolateY(points, x) {
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (x >= a.x && x <= b.x) {
+        const t = (x - a.x) / (b.x - a.x);
+        return a.y + t * (b.y - a.y);
+      }
+    }
+    return points[points.length - 1].y;
+  }
+
+  function xToChainageM(x, bounds) {
+    return ((x - bounds.xMin) / (bounds.xMax - bounds.xMin)) * bounds.routeLengthM;
+  }
+
+  function yToElevation(y, bounds) {
+    const t = (y - bounds.yMin) / (bounds.yMax - bounds.yMin);
+    return bounds.elevAtYMin + t * (bounds.elevAtYMax - bounds.elevAtYMin);
+  }
+
+  function formatStation(meters, bounds) {
+    const totalM = bounds.routeStartM + meters;
+    const picket = Math.floor(totalM / 100);
+    const offset = totalM - picket * 100;
+    return `ПК ${picket}+${offset.toFixed(2).padStart(5, '0')}`;
+  }
+
+  function formatSignedFixed(v, digits) {
+    return `${v >= 0 ? '+' : ''}${v.toFixed(digits)}`;
+  }
+
+  function slopePerMille(points, x, bounds) {
+    const dx = 6;
+    const x0 = Math.max(bounds.xMin, x - dx);
+    const x1 = Math.min(bounds.xMax, x + dx);
+    const elev0 = yToElevation(interpolateY(points, x0), bounds);
+    const elev1 = yToElevation(interpolateY(points, x1), bounds);
+    const dxMeters = xToChainageM(x1, bounds) - xToChainageM(x0, bounds);
+    return ((elev1 - elev0) / dxMeters) * 1000;
+  }
+
+  function distanceToNextStationM(meters, bounds) {
+    const totalM = bounds.routeStartM + meters;
+    const offset = totalM % 100;
+    return 100 - offset;
+  }
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  const svg = document.getElementById('hero-demo-svg');
+  const marker = document.getElementById('hero-demo-marker');
+  const cursorLine = document.getElementById('hero-demo-cursor-line');
+  const stationEl = document.getElementById('hero-demo-station');
+  const designEl = document.getElementById('hero-demo-elev-design');
+  const groundEl = document.getElementById('hero-demo-elev-ground');
+  const workingEl = document.getElementById('hero-demo-elev-working');
+  const slopeEl = document.getElementById('hero-demo-slope');
+  const distEl = document.getElementById('hero-demo-dist');
+
+  if (svg && marker && cursorLine && stationEl && designEl && groundEl && workingEl && slopeEl && distEl) {
+    const bounds = plotBounds;
+    const { xMin, xMax } = bounds;
+
+    function renderAt(x) {
+      const designY = interpolateY(designPoints, x);
+      const groundY = interpolateY(groundPoints, x);
+      const meters = xToChainageM(x, bounds);
+      const designElev = yToElevation(designY, bounds);
+      const groundElev = yToElevation(groundY, bounds);
+      const working = groundElev - designElev;
+      const slope = slopePerMille(designPoints, x, bounds);
+      const dist = distanceToNextStationM(meters, bounds);
+
+      marker.setAttribute('cx', String(x));
+      marker.setAttribute('cy', String(designY));
+      cursorLine.setAttribute('x1', String(x));
+      cursorLine.setAttribute('x2', String(x));
+      stationEl.textContent = formatStation(meters, bounds);
+      designEl.textContent = designElev.toFixed(2);
+      groundEl.textContent = groundElev.toFixed(2);
+      workingEl.textContent = formatSignedFixed(working, 2);
+      slopeEl.textContent = slope.toFixed(1);
+      distEl.textContent = `${dist.toFixed(2)} м`;
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let hovering = false;
+    let resumeTimeout = null;
+    let rafId = null;
+
+    const PASS_MS = 8000;
+    const PAUSE_MS = 500;
+
+    function driftLoop(startTime, fromX, toX) {
+      function step(now) {
+        if (hovering) return;
+        const elapsed = now - startTime;
+        if (elapsed < PAUSE_MS) {
+          renderAt(fromX);
+          rafId = requestAnimationFrame(step);
+          return;
+        }
+        const t = Math.min(1, (elapsed - PAUSE_MS) / PASS_MS);
+        const eased = easeInOutCubic(t);
+        const x = fromX + (toX - fromX) * eased;
+        renderAt(x);
+        if (t < 1) {
+          rafId = requestAnimationFrame(step);
+        } else {
+          rafId = requestAnimationFrame((n) => driftLoop(n, toX, fromX));
+        }
+      }
+      rafId = requestAnimationFrame(step);
+    }
+
+    if (!reduceMotion) {
+      requestAnimationFrame((now) => driftLoop(now, xMin, xMax));
+    }
+
+    function handlePointerMove(evt) {
+      hovering = true;
+      if (resumeTimeout) {
+        clearTimeout(resumeTimeout);
+        resumeTimeout = null;
+      }
+      const rect = svg.getBoundingClientRect();
+      const viewBoxWidth = 440;
+      const scale = viewBoxWidth / rect.width;
+      const localX = (evt.clientX - rect.left) * scale;
+      const clampedX = Math.min(xMax, Math.max(xMin, localX));
+      renderAt(clampedX);
+    }
+
+    function handlePointerLeave() {
+      resumeTimeout = setTimeout(() => {
+        hovering = false;
+        if (!reduceMotion) {
+          if (rafId) cancelAnimationFrame(rafId);
+          requestAnimationFrame((now) => driftLoop(now, xMin, xMax));
+        }
+      }, 300);
+    }
+
+    svg.addEventListener('pointermove', handlePointerMove);
+    svg.addEventListener('pointerleave', handlePointerLeave);
+  }
+</script>
