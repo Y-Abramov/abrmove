@@ -10,6 +10,12 @@ const modules = [
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+
+const platformColor: Record<string, string> = {
+  'Topomatic Robur': 'text-violet',
+  'Autodesk Civil 3D': 'text-emerald',
+  'Robur / Civil 3D': 'text-amber',
+};
 ---
 
 <section id="downloads" class="bg-surface/20 border-b border-line">
@@ -48,7 +54,7 @@ function formatDate(d: string) {
           <div class="col-span-2">
             <span class="font-mono text-[10px] text-gray-3 border border-line px-2 py-0.5">v{mod.version}</span>
           </div>
-          <div class="col-span-3 hidden sm:block font-mono text-[11px] text-gray-3">{mod.platform}</div>
+          <div class:list={['col-span-3 hidden sm:block font-mono text-[11px]', platformColor[mod.platform] ?? 'text-gray-3']}>{mod.platform}</div>
           <div class="col-span-2 flex justify-end">
             <a
               href={`/downloads/${mod.slug}`}

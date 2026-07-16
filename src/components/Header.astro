@@ -13,16 +13,12 @@ const navItems = [
     <div class="flex items-center justify-between h-14">
 
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2.5 group cursor-pointer shrink-0">
-        <img src="/logo-mark.svg" alt="ABR MOVE" class="w-7 h-7" />
-        <div class="flex flex-col leading-none">
-          <span class="font-bold text-sm tracking-widest2 uppercase text-white">ABR</span>
-          <span class="font-mono text-[9px] tracking-widest3 uppercase text-gray-3 -mt-0.5">MOVE</span>
-        </div>
+      <a href="/" class="flex items-center shrink-0 cursor-pointer">
+        <img src="/logo-lockup-white.png" alt="ABR MOVE" class="h-[38px] w-auto" />
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center gap-7">
+      <nav id="nav-links" class="hidden lg:flex items-center gap-7">
         {navItems.map((item) => (
           <a
             href={item.href}
@@ -67,4 +63,58 @@ const navItems = [
   const toggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
   toggle?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+
+  // Highlight the current section in the desktop nav on scroll.
+  (function () {
+    const nav = document.getElementById('nav-links');
+    if (!nav) return;
+    const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
+    const pairs = links
+      .map((link) => {
+        const section = document.getElementById(link.getAttribute('href').slice(1));
+        return section ? { link, section } : null;
+      })
+      .filter(Boolean);
+    if (!pairs.length) return;
+
+    const HEADER_CLEARANCE = 56 + 40;
+    let activeId = null;
+
+    function setActive(id) {
+      if (id === activeId) return;
+      activeId = id;
+      for (const { link, section } of pairs) {
+        const on = section.id === id;
+        link.style.color = on ? '#22D3EE' : '';
+        link.style.textDecoration = on ? 'underline' : '';
+        link.style.textDecorationColor = on ? '#22D3EE' : '';
+        link.style.textUnderlineOffset = on ? '6px' : '';
+      }
+    }
+
+    function update() {
+      let current = null;
+      for (const pair of pairs) {
+        if (pair.section.getBoundingClientRect().top <= HEADER_CLEARANCE) current = pair;
+      }
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        current = pairs[pairs.length - 1];
+      }
+      setActive(current ? current.section.id : null);
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  })();
 </script>

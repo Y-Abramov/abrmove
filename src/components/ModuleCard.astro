@@ -10,12 +10,18 @@ interface Props {
   };
 }
 const { mod } = Astro.props;
+
+const platformColor: Record<string, string> = {
+  'Topomatic Robur': 'text-violet',
+  'Autodesk Civil 3D': 'text-emerald',
+  'Robur / Civil 3D': 'text-amber',
+};
 ---
 
 <a href={mod.href} class="group bg-base p-7 flex flex-col gap-5 card-hover cursor-pointer">
   <!-- Number + platform -->
   <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] tracking-widest2 text-gray-3 uppercase">{mod.platform}</span>
+    <span class:list={['font-mono text-[10px] tracking-widest2 uppercase', platformColor[mod.platform] ?? 'text-gray-3']}>{mod.platform}</span>
     <span class="font-mono text-xs text-gray-4">{mod.num}</span>
   </div>
 

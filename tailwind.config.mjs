@@ -17,6 +17,10 @@ export default {
         accent: '#22D3EE',
         'accent-dim': '#0C4A56',
         'accent-glow': 'rgba(34, 211, 238, 0.10)',
+        amber: '#F5A524',
+        emerald: '#34D399',
+        rose: '#FB5E7E',
+        violet: '#A78BFA',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
