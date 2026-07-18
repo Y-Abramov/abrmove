@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ABR|MOVE — модуль (мокап)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root[data-theme="dark"]{
+  --ink:#0E1116; --panel:#151A21; --panel-2:#1B222B;
+  --line:#28313D; --line-strong:#3A4657;
+  --fg:#E7ECF2; --muted:#949DAC; --faint:#5D6675;
+  --paint:#22D3EE; --paint-ink:#0E1116; --paint-soft:rgba(34,211,238,.10); --paint-line:rgba(34,211,238,.32);
+  --grade:#E5484D; --ground:#7A8494;
+}
+:root[data-theme="light"]{
+  --ink:#F4F6F8; --panel:#FFFFFF; --panel-2:#EDF0F3;
+  --line:#DDE2E9; --line-strong:#C4CCD6;
+  --fg:#141A22; --muted:#586373; --faint:#96A0AE;
+  --paint:#0891B2; --paint-ink:#FFFFFF; --paint-soft:rgba(8,145,178,.09); --paint-line:rgba(8,145,178,.30);
+  --grade:#CF3438; --ground:#8A94A3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--fg);font-family:"Golos Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+.mono{font-family:"JetBrains Mono",monospace}
+a{color:inherit;text-decoration:none}
+
+/* header (same as home) */
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--ink) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:1400px;margin:0 auto;padding:0 24px}
+.brand img{height:30px;display:block;width:auto}
+.brand .l-light{display:none}
+:root[data-theme="light"] .brand .l-dark{display:none}
+:root[data-theme="light"] .brand .l-light{display:block}
+.hd nav{display:flex;gap:26px}
+.hd nav a{font-size:13px;color:var(--muted)}
+.hd nav a.on,.hd nav a:hover{color:var(--fg)}
+.hd-r{display:flex;align-items:center;gap:14px}
+.tgl{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:7px;padding:0;border:1px solid var(--line-strong);background:var(--panel);color:var(--muted);cursor:pointer;transition:background-color .2s,border-color .2s,color .2s}
+.tgl:hover{color:var(--paint)}
+.tgl svg{width:15px;height:15px;display:none}
+:root[data-theme="dark"] .tgl .icon-moon{display:block}
+:root[data-theme="light"] .tgl .icon-sun{display:block}
+
+/* docs 3-pane */
+.docs{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:250px minmax(0,1fr) 220px;gap:0}
+.pane{padding:34px 26px}
+.left{border-right:1px solid var(--line);position:sticky;top:60px;align-self:start;height:calc(100vh - 60px);overflow-y:auto}
+.right{border-left:1px solid var(--line);position:sticky;top:60px;align-self:start;height:calc(100vh - 60px);overflow-y:auto}
+.center{padding:44px 48px;min-width:0}
+
+/* left nav */
+.grp{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.grp::before{content:"";width:12px;border-top:2px solid var(--paint)}
+.mlist{list-style:none;margin:0 0 28px}
+.mlist a{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:8px 10px;font-size:13.5px;color:var(--muted);border-left:2px solid transparent;transition:.15s}
+.mlist a:hover{color:var(--fg);background:var(--panel)}
+.mlist a.on{color:var(--fg);border-left-color:var(--paint);background:var(--paint-soft)}
+.mlist a .v{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--faint)}
+.soon{opacity:.5}
+.soon a{cursor:not-allowed}
+.soon-tag{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--paint);border:1px solid var(--paint-line);padding:1px 5px;margin-left:6px}
+
+/* center content */
+.crumb{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--faint);letter-spacing:.06em;margin-bottom:16px}
+.crumb b{color:var(--paint)}
+.doc-h1{font-weight:900;letter-spacing:-.025em;font-size:clamp(1.9rem,3.4vw,2.7rem);line-height:1.05}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 22px}
+.badge{font-family:"JetBrains Mono",monospace;font-size:11px;padding:5px 10px;border:1px solid var(--line-strong);color:var(--muted)}
+.badge.pri{border-color:var(--paint-line);color:var(--paint);background:var(--paint-soft)}
+.doc-lead{font-size:17px;color:var(--muted);line-height:1.6;max-width:42rem;margin-bottom:26px}
+.shot{aspect-ratio:16/8;background:
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/100% 24px,
+  linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/24px 100%,
+  var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:36px}
+.shot span{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--faint);letter-spacing:.1em}
+.center h2{scroll-margin-top:78px;font-weight:800;letter-spacing:-.01em;font-size:1.35rem;margin:38px 0 14px;display:flex;align-items:center;gap:12px}
+.center h2 .n{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--paint);font-weight:500}
+.center p{color:var(--muted);font-size:15px;line-height:1.7;max-width:42rem;margin-bottom:14px}
+.center strong{color:var(--fg);font-weight:600}
+.steps{list-style:none;counter-reset:s;margin:8px 0 18px;max-width:42rem}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 40px;border-bottom:1px solid var(--line);color:var(--muted);font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;border:1px solid var(--paint-line);color:var(--paint);font-family:"JetBrains Mono",monospace;font-size:12px;display:flex;align-items:center;justify-content:center}
+.code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--panel);border:1px solid var(--line);padding:12px 14px;color:var(--fg);margin:8px 0 18px;max-width:42rem;overflow-x:auto}
+.note{border-left:2px solid var(--paint);background:var(--paint-soft);padding:12px 16px;font-size:14px;color:var(--muted);margin:8px 0 18px;max-width:42rem}
+.faq{border-top:1px solid var(--line);max-width:42rem}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{padding:14px 0;cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between}
+.faq summary::after{content:"+";color:var(--paint);font-family:"JetBrains Mono",monospace}
+.faq details[open] summary::after{content:"−"}
+.faq p{padding:0 0 14px}
+
+/* right TOC */
+.toc-t{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:14px}
+.toc{list-style:none}
+.toc a{display:block;padding:6px 0 6px 12px;font-size:12.5px;color:var(--faint);border-left:1px solid var(--line);transition:.15s}
+.toc a:hover{color:var(--muted)}
+.toc a.on{color:var(--paint);border-left-color:var(--paint)}
+
+@media(max-width:1080px){.docs{grid-template-columns:220px minmax(0,1fr)}.right{display:none}}
+@media(max-width:760px){.docs{grid-template-columns:1fr}.left{display:none}.center{padding:28px 20px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <a class="brand" href="mockup.html" aria-label="ABR MOVE">
+      <img class="l-dark" src="public/logo-lockup-white.png" alt="ABR | MOVE" />
+      <img class="l-light" src="public/logo-lockup.png" alt="ABR | MOVE" />
+    </a>
+    <nav>
+      <a href="mockup.html">Главная</a>
+      <a href="#" class="on">Модули</a>
+      <a href="#">Установка</a>
+      <a href="#">Новости</a>
+    </nav>
+    <div class="hd-r">
+      <button class="tgl" id="tgl" type="button" aria-label="Переключить тему">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a.5.5 0 0 0-.65-.6A9 9 0 1 0 21.1 15.15a.5.5 0 0 0-.6-.65z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="docs">
+  <!-- LEFT: module nav -->
+  <aside class="pane left">
+    <div class="grp">Topomatic Robur</div>
+    <ul class="mlist">
+      <li><a href="#"><span>Библиотека модулей</span><span class="v mono">2.0.0</span></a></li>
+      <li><a href="#"><span>Быстрые команды</span><span class="v mono">1.0.0</span></a></li>
+      <li><a href="#" class="on"><span>Отслеживание курсора</span><span class="v mono">1.0.0</span></a></li>
+      <li><a href="#"><span>Диспетчер стилей</span><span class="v mono">1.0.2</span></a></li>
+      <li><a href="#"><span>Диспетчер моделей</span><span class="v mono">1.1.0</span></a></li>
+    </ul>
+    <div class="grp">Autodesk Civil 3D <span class="soon-tag">СКОРО</span></div>
+    <ul class="mlist soon">
+      <li><a><span>Модули в разработке</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- CENTER: doc content -->
+  <main class="pane center">
+    <div class="crumb">Модули <b>/</b> Robur <b>/</b> Отслеживание курсора</div>
+    <h1 class="doc-h1">Отслеживание курсора</h1>
+    <div class="badges">
+      <span class="badge pri">v1.0.0</span>
+      <span class="badge">Автомобильные дороги</span>
+      <span class="badge">Железные дороги</span>
+      <span class="badge">Robur 16.0.62.12+</span>
+    </div>
+    <p class="doc-lead">Синхронизирует положение курсора между планом и продольным профилем. Наводишь на точку в плане — она сразу подсвечивается на профиле, и наоборот. Меньше переключений между видами, меньше ошибок привязки.</p>
+
+    <div class="shot"><span>СКРИНШОТ / ГИФКА · план ↔ профиль</span></div>
+
+    <h2 id="s-overview"><span class="n">01</span>Обзор</h2>
+    <p>При проектировании трассы инженер постоянно сверяет план и продольный профиль. Без синхронизации приходится вручную искать один и тот же пикет в двух окнах. <strong>Отслеживание курсора</strong> связывает виды: одна позиция подсвечивается в обоих одновременно.</p>
+
+    <h2 id="s-compat"><span class="n">02</span>Совместимость</h2>
+    <p>Работает в конфигурациях <strong>Автомобильные дороги</strong> и <strong>Железные дороги</strong>. Требуется Topomatic Robur версии <strong>16.0.62.12</strong> или новее.</p>
+
+    <h2 id="s-install"><span class="n">03</span>Установка</h2>
+    <ol class="steps">
+      <li>Установите менеджер <strong>AbrModules</strong> (Библиотека модулей).</li>
+      <li>В Robur откройте вкладку <strong>ABR → Библиотека модулей</strong>.</li>
+      <li>Найдите «Отслеживание курсора» и нажмите <strong>Установить</strong>.</li>
+      <li>Перезапустите Robur — модуль появится в ленте команд.</li>
+    </ol>
+    <div class="note">Обновления модуля приходят автоматически через Библиотеку модулей — вручную ничего переустанавливать не нужно.</div>
+
+    <h2 id="s-usage"><span class="n">04</span>Как это работает</h2>
+    <p>После установки включите синхронизацию в панели модуля. Наведите курсор на точку трассы в плане — на профиле появится вертикальная линия привязки на том же пикете. Значение пикета и отметки отображается в статусной строке.</p>
+    <div class="code">ABR → Отслеживание курсора → Включить синхронизацию (Ctrl+Alt+S)</div>
+
+    <h2 id="s-settings"><span class="n">05</span>Настройки</h2>
+    <p>Цвет и стиль линии привязки, отображение пикета/отметки, привязка к узлам трассы — настраиваются в панели модуля. Настройки сохраняются в проекте.</p>
+
+    <h2 id="s-faq"><span class="n">06</span>Частые вопросы</h2>
+    <div class="faq">
+      <details open><summary>Работает в Civil 3D?<span></span></summary><p>Пока нет — модуль для Topomatic Robur. Версия под Civil 3D в планах.</p></details>
+      <details><summary>Влияет на производительность?<span></span></summary><p>Нет, синхронизация лёгкая и не нагружает проект даже на больших трассах.</p></details>
+      <details><summary>Можно отключить на время?<span></span></summary><p>Да, тем же сочетанием Ctrl+Alt+S или кнопкой в панели.</p></details>
+    </div>
+  </main>
+
+  <!-- RIGHT: TOC -->
+  <aside class="pane right">
+    <div class="toc-t">На этой странице</div>
+    <ul class="toc" id="toc">
+      <li><a href="#s-overview">Обзор</a></li>
+      <li><a href="#s-compat">Совместимость</a></li>
+      <li><a href="#s-install">Установка</a></li>
+      <li><a href="#s-usage">Как это работает</a></li>
+      <li><a href="#s-settings">Настройки</a></li>
+      <li><a href="#s-faq">Частые вопросы</a></li>
+    </ul>
+  </aside>
+</div>
+
+<script>
+const root=document.documentElement;
+document.getElementById('tgl').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark'});
+
+/* TOC scroll-spy */
+const links=[...document.querySelectorAll('#toc a')];
+const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+const spy=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('on'));map.get(e.target.id)?.classList.add('on')}});
+},{rootMargin:'-72px 0px -70% 0px',threshold:0});
+document.querySelectorAll('.center h2[id]').forEach(h=>spy.observe(h));
+</script>
+</body>
+</html>

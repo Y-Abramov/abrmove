@@ -3,119 +3,35 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
-import Solutions from '../components/Solutions.astro';
+import PluginsTable from '../components/PluginsTable.astro';
 import News from '../components/News.astro';
-import YouTubeCarousel from '../components/YouTubeCarousel.astro';
-import Downloads from '../components/Downloads.astro';
+import Videos from '../components/Videos.astro';
 import Footer from '../components/Footer.astro';
+import SupportModal from '../components/SupportModal.astro';
 ---
 
 <Layout title="ABR | MOVE: Инструменты для проектирования дорог">
-  <Header />
+  <Header active="home" />
 
-  <main class="bg-base flex flex-col">
+  <main>
+    <div class="wrap" style="padding-top:30px"><div class="datum"><span class="station l mono">ПК 0+00</span><span class="station r mono">НАЧАЛО ТРАССЫ</span></div></div>
     <Hero />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 1+00</span><span class="station r mono">О АВТОРЕ</span></div></div>
     <About />
-    <Solutions />
-    <News />
-    <YouTubeCarousel />
-    <Downloads />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 2+00</span><span class="station r mono">МОДУЛИ · ТОП 03</span></div></div>
+    <PluginsTable />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 3+00</span><span class="station r mono">НОВОСТИ</span></div></div>
+    <News limit={3} />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 4+00</span><span class="station r mono">ВИДЕО</span></div></div>
+    <Videos />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 5+00</span><span class="station r mono">КОНЕЦ ТРАССЫ</span></div></div>
   </main>
 
   <Footer />
-
-  <!-- Support modal -->
-  <div id="qr-modal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
-    <div id="qr-backdrop" class="absolute inset-0 bg-black/75 backdrop-blur-sm"></div>
-
-    <div class="relative bg-surface border border-line flex flex-col max-w-sm w-full overflow-hidden">
-
-      <button id="qr-close" class="absolute top-3 right-3 text-gray-3 hover:text-white transition-colors cursor-pointer z-10">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-
-      <div class="px-7 pt-7 pb-5 border-b border-line flex items-center gap-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#E53E6D" stroke="#E53E6D" stroke-width="1.5">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <span class="font-bold text-white text-sm">Поддержать автора</span>
-      </div>
-
-      <div class="px-7 py-5 border-b border-line">
-        <p class="text-[12px] text-gray-2 leading-relaxed mb-4">
-          Все инструменты я делаю после основной работы, потому что сам сталкивался с теми же задачами, что и Вы. Если хоть один модуль сэкономил Вам час, буду рад любой поддержке.
-        </p>
-        <ul class="flex flex-col gap-2">
-          {[
-            'Больше времени на новые модули',
-            'Поддержка и обновления под новые версии Robur',
-            'Статьи и видео по реальным задачам проектирования',
-          ].map(item => (
-            <li class="flex items-center gap-2 text-[11px] text-gray-3">
-              <span class="w-1 h-1 rounded-full bg-accent shrink-0"></span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="px-7 py-6 flex flex-col items-center gap-5">
-        <div class="w-44 h-44 border border-line p-2 bg-surface flex items-center justify-center">
-          <img
-            src="/qr-yoomoney.png"
-            alt="QR ЮMoney"
-            class="w-full h-full object-contain"
-          />
-        </div>
-
-        <div class="flex flex-col items-center gap-1">
-          <span class="text-[11px] text-gray-3">Отсканируйте камерой телефона</span>
-          <span class="font-mono text-[10px] text-gray-4">ЮMoney</span>
-        </div>
-
-        <a
-          href="https://yoomoney.ru/to/4100119553658750"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="w-full flex items-stretch overflow-hidden bg-[#8448FF] hover:bg-[#9560FF] transition-colors duration-150"
-        >
-          <span class="flex items-center justify-center px-5 bg-black/25 text-white font-black text-xl leading-none select-none">
-            Ю
-          </span>
-          <span class="flex items-center justify-center flex-1 py-3.5 px-4 text-white text-sm font-semibold tracking-wide">
-            Перевести через ЮMoney
-          </span>
-        </a>
-      </div>
-
-      <div class="px-7 py-4 border-t border-line">
-        <p class="text-[11px] text-gray-4 text-center leading-relaxed">
-          Спасибо. Это правда важно и мотивирует делать больше.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const btn = document.getElementById('support-btn');
-    const modal = document.getElementById('qr-modal');
-    const backdrop = document.getElementById('qr-backdrop');
-    const close = document.getElementById('qr-close');
-
-    btn?.addEventListener('click', () => {
-      modal?.classList.remove('hidden');
-      modal?.classList.add('flex');
-    });
-
-    const closeModal = () => {
-      modal?.classList.add('hidden');
-      modal?.classList.remove('flex');
-    };
-
-    close?.addEventListener('click', closeModal);
-    backdrop?.addEventListener('click', closeModal);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-  </script>
+  <SupportModal />
 </Layout>

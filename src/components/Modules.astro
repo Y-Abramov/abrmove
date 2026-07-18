@@ -1,0 +1,34 @@
+---
+import { modules } from '../data/modules';
+---
+
+<section id="mods" class="wrap section-pad">
+  <div class="sec-head rv">
+    <div>
+      <div class="sec-k">// ВСЕ МОДУЛИ · TOPOMATIC ROBUR</div>
+      <h2>Каталог модулей</h2>
+    </div>
+    <p>Ставятся через менеджер AbrModules прямо во вкладке Robur. Обновления приходят автоматически.</p>
+  </div>
+
+  <div class="mods">
+    {modules.map((m) => (
+      <a class="card rv" href={`/modules/${m.slug}`}>
+        <div class="shot">
+          {m.gif && <span class="play">▶ ГИФКА</span>}
+          {m.screenshot
+            ? <img src={m.screenshot} alt={m.title} loading="lazy" />
+            : <span class="ph">СКРИНШОТ / ГИФКА<br/>{m.title}</span>}
+        </div>
+        <div class="cbody">
+          <div class="ctitle"><h3>{m.title}</h3><span class="ver mono">v{m.version}</span></div>
+          <p class="cdesc">{m.short}</p>
+          <div class="stamp">
+            <div>ABR·MOVE</div><div>{m.compatShort}</div>
+            <div>Подробнее <span class="arw">→</span></div>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

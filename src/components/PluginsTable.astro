@@ -1,0 +1,82 @@
+---
+import { getLivePopularModules } from '../data/live-modules';
+import { downloadHref } from '../data/counter-endpoint';
+const popularModules = await getLivePopularModules();
+---
+
+<section id="mods" class="wrap section-pad">
+  <div class="sec-head rv">
+    <div>
+      <div class="sec-k">// КАТАЛОГ МОДУЛЕЙ</div>
+      <h2>Модули под вашу платформу</h2>
+    </div>
+    <p>Самые ходовые модули.</p>
+  </div>
+
+  <div class="rv d1" style="max-width:1000px;margin:0 auto">
+    <!-- Platform toggle -->
+    <div class="ptabs" role="tablist" aria-label="Платформа">
+      <button class="ptab on" type="button" role="tab" aria-selected="true" data-tab="robur">
+        Топоматик Robur <span class="cnt mono">{popularModules.length}</span>
+      </button>
+      <button class="ptab" type="button" role="tab" aria-selected="false" data-tab="civil">
+        Autodesk Civil 3D <span class="soon-mini mono">СКОРО</span>
+      </button>
+    </div>
+
+    <!-- ROBUR panel -->
+    <div class="ptable" data-panel="robur">
+      <div class="pt-head">
+        <span>Модуль</span>
+        <span>Версия</span>
+        <span>Совместимость</span>
+        <span></span>
+      </div>
+      {popularModules.map((m) => (
+        <div class="pt-row">
+          <span>
+            <a class="pt-name" href={`/modules/${m.slug}`}>{m.title}{m.hit && <span class="flag mono">ХИТ</span>}</a>
+            <span class="pt-desc">{m.short}</span>
+          </span>
+          <span class="pt-ver mono">v{m.version}</span>
+          <span class="pt-compat mono">{m.compatShort}</span>
+          <span class="pt-actions">
+            {m.download && (
+              <a class="pt-dl" href={downloadHref('module', m.slug, m.download, m.version)} target="_blank" rel="noopener noreferrer">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Скачать
+              </a>
+            )}
+            <a class="pt-details mono" href={`/modules/${m.slug}`}>Подробнее →</a>
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <!-- CIVIL 3D panel (placeholder) -->
+    <div class="pt-empty" data-panel="civil" hidden>
+      <div class="big mono">CIVIL 3D · СКОРО</div>
+      <p>Модули под Autodesk Civil 3D в разработке. Пока доступны модули для Топоматик Robur, переключитесь на вкладку Robur.</p>
+    </div>
+
+    <div class="pt-more">
+      <a class="btn" href="/modules">Больше модулей <span class="arw">→</span></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.ptab');
+  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.tab;
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('on', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.panel !== key; });
+    });
+  });
+</script>

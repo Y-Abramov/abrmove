@@ -1,120 +1,33 @@
 ---
-const navItems = [
-  { label: 'Главная', href: '#hero' },
-  { label: 'Модули', href: '#solutions' },
-  { label: 'Новости', href: '#news' },
-  { label: 'Документация', href: '#downloads' },
-  { label: 'Обо мне', href: '#about' },
+interface Props {
+  active?: 'home' | 'modules' | 'news';
+}
+const { active } = Astro.props;
+
+const nav = [
+  { label: 'Главная', href: '/', key: 'home' },
+  { label: 'Модули', href: '/#mods', key: 'modules' },
+  { label: 'Новости', href: '/#news', key: 'news' },
 ];
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 border-b border-line bg-base/80 backdrop-blur-md">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-center justify-between h-14">
+<header class="site-header">
+  <div class="wrap hd">
+    <a class="brand" href="/" aria-label="ABR MOVE — на главную">
+      <img src="/logo-lockup.svg" alt="ABR | MOVE" />
+    </a>
 
-      <!-- Logo -->
-      <a href="/" class="flex items-center shrink-0 cursor-pointer">
-        <img src="/logo-lockup-white.png" alt="ABR MOVE" class="h-[38px] w-auto" />
-      </a>
+    <nav>
+      {nav.map((l) => (
+        <a href={l.href} class={active === l.key ? 'on' : ''}>{l.label}</a>
+      ))}
+    </nav>
 
-      <!-- Desktop nav -->
-      <nav id="nav-links" class="hidden lg:flex items-center gap-7">
-        {navItems.map((item) => (
-          <a
-            href={item.href}
-            class="font-mono text-[11px] tracking-widest2 uppercase text-gray-3 hover:text-white transition-colors duration-150 cursor-pointer"
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-
-      <!-- CTA -->
-      <a href="#downloads" class="hidden md:inline-flex btn-accent shrink-0">
-        Скачать
-      </a>
-
-      <!-- Mobile toggle -->
-      <button id="menu-toggle" class="md:hidden p-1.5 text-gray-3 hover:text-white transition-colors cursor-pointer" aria-label="Меню">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="8" x2="21" y2="8"/>
-          <line x1="3" y1="16" x2="21" y2="16"/>
-        </svg>
+    <div class="hd-r">
+      <button class="tgl" id="theme-toggle" type="button" aria-label="Переключить тему">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a.5.5 0 0 0-.65-.6A9 9 0 1 0 21.1 15.15a.5.5 0 0 0-.6-.65z"/></svg>
       </button>
     </div>
   </div>
-
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden border-t border-line bg-surface">
-    <nav class="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-4">
-      {navItems.map((item) => (
-        <a href={item.href} class="font-mono text-xs tracking-widest2 uppercase text-gray-2 hover:text-white transition-colors cursor-pointer">
-          {item.label}
-        </a>
-      ))}
-      <a href="#downloads" class="mt-2 btn-accent self-start">
-        Скачать модули
-      </a>
-    </nav>
-  </div>
 </header>
-
-<script>
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-  toggle?.addEventListener('click', () => menu?.classList.toggle('hidden'));
-
-  // Highlight the current section in the desktop nav on scroll.
-  (function () {
-    const nav = document.getElementById('nav-links');
-    if (!nav) return;
-    const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
-    const pairs = links
-      .map((link) => {
-        const section = document.getElementById(link.getAttribute('href').slice(1));
-        return section ? { link, section } : null;
-      })
-      .filter(Boolean);
-    if (!pairs.length) return;
-
-    const HEADER_CLEARANCE = 56 + 40;
-    let activeId = null;
-
-    function setActive(id) {
-      if (id === activeId) return;
-      activeId = id;
-      for (const { link, section } of pairs) {
-        const on = section.id === id;
-        link.style.color = on ? '#22D3EE' : '';
-        link.style.textDecoration = on ? 'underline' : '';
-        link.style.textDecorationColor = on ? '#22D3EE' : '';
-        link.style.textUnderlineOffset = on ? '6px' : '';
-      }
-    }
-
-    function update() {
-      let current = null;
-      for (const pair of pairs) {
-        if (pair.section.getBoundingClientRect().top <= HEADER_CLEARANCE) current = pair;
-      }
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
-        current = pairs[pairs.length - 1];
-      }
-      setActive(current ? current.section.id : null);
-    }
-
-    let ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    update();
-  })();
-</script>

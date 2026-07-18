@@ -1,95 +1,71 @@
 ---
 const stack = [
-  'Topomatic Robur', 'Autodesk Civil 3D', 'Dynamo', 'BIM',
-  'C# / .NET', 'Python', 'Продольное проектирование',
-  'Поперечные профили', 'ЦММ / ЦМР',
+  'Топоматик Robur', 'Autodesk Civil 3D', 'Dynamo', 'C# / .NET', 'BIM проектирование',
+];
+const stats = [
+  { v: '7 лет', l: 'в проектировании' },
+  { v: '5', l: 'модулей' },
+  { v: 'Free', l: 'всё бесплатно' },
 ];
 ---
 
-<section id="about" class="bg-base border-b border-line">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-
-    <!-- Section header -->
-    <div class="reveal flex items-center gap-5 mb-4">
-      <span class="section-label">О разработчике</span>
-      <div class="section-rule"></div>
+<section id="about" class="wrap section-pad">
+  <div class="sec-head rv">
+    <div>
+      <div class="sec-k">// О РАЗРАБОТЧИКЕ</div>
+      <h2>Кто это делает</h2>
     </div>
+    <p>Инструменты пишет практикующий инженер под задачи, с которыми сам сталкивается.</p>
+  </div>
 
-    <div class="reveal reveal-delay-1 mb-10">
-      <h2 class="text-2xl sm:text-3xl font-bold text-white">Ярослав Абрамов</h2>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-line">
-
-      <!-- Left: identity & bio -->
-      <div class="bg-base p-8 flex flex-col gap-6">
-
-        <!-- Avatar + title -->
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 border border-line bg-surface flex items-center justify-center font-bold text-white text-sm select-none shrink-0">
-            ЯА
-          </div>
-          <div>
-            <div class="font-bold text-white text-sm">Ярослав Абрамов</div>
-            <div class="font-mono text-[11px] text-gray-3 mt-0.5">Инженер-проектировщик автомобильных дорог</div>
-          </div>
-        </div>
-
-        <!-- Robur Expert badge -->
-        <div class="inline-flex items-center gap-2 border border-accent-dim bg-accent-glow px-3 py-1.5 w-fit">
-          <img src="/logo-mark.svg" alt="" class="w-3.5 h-3.5" />
-          <span class="font-mono text-[10px] tracking-widest2 uppercase text-accent">Robur Expert</span>
-        </div>
-
-        <!-- Bio -->
-        <div class="flex flex-col gap-3">
-          <p class="text-sm text-gray-2 leading-relaxed">
-            Занимаюсь проектированием автомобильных дорог более 10 лет. Специализируюсь на автоматизации проектных процессов в Topomatic Robur и Autodesk Civil 3D.
-          </p>
-          <p class="text-sm text-gray-2 leading-relaxed">
-            Разрабатываю решения, которые позволяют инженерам быстрее выполнять рутинные операции. Все модули созданы на основе реального опыта: не академические упражнения, а ответ на конкретные проблемы рабочего процесса.
-          </p>
-        </div>
-
-        <!-- Stack tags -->
-        <div class="flex flex-wrap gap-2 pt-2">
-          {stack.map((s) => (
-            <span class="font-mono text-[10px] text-gray-3 border border-line px-2 py-0.5 hover:border-gray-3 hover:text-gray-1 transition-colors cursor-default">
-              {s}
-            </span>
-          ))}
+  <div class="about-grid rv d1">
+    <!-- identity + bio -->
+    <div class="about-l">
+      <div class="about-id">
+        <div class="about-ava"><span>ЯА</span><img src="/avatar.jpg" alt="Ярослав Абрамов" onerror="this.remove()" /></div>
+        <div>
+          <div class="nm">Ярослав Абрамов</div>
+          <div class="rl mono">Инженер-проектировщик автодорог</div>
         </div>
       </div>
 
-      <!-- Right: stats + support -->
-      <div class="bg-base flex flex-col divide-y divide-line">
+      <span class="about-badge mono"><span class="d"></span>Robur Expert</span>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-3 divide-x divide-line">
-          {[
-            { v: '10+', l: 'лет опыта' },
-            { v: '50+', l: 'проектов' },
-            { v: '5', l: 'модулей' },
-          ].map((s) => (
-            <div class="p-7 flex flex-col gap-1">
-              <span class="font-mono font-bold text-2xl text-white">{s.v}</span>
-              <span class="font-mono text-[10px] text-gray-3">{s.l}</span>
-            </div>
-          ))}
-        </div>
+      <div class="about-bio">
+        <p>Больше 7 лет проектирую автомобильные дороги. Специализируюсь на автоматизации проектных процессов в Топоматик Robur и Autodesk Civil 3D.</p>
+        <p>Модули рождаются из реальной работы, а не из «вообще»: сам упираюсь в рутину проектирования и стараюсь автоматизировать процесс.</p>
+      </div>
 
-        <!-- CTA block -->
-        <div class="flex-1 p-8 flex flex-col justify-center gap-6">
-          <p class="text-sm text-gray-2 leading-relaxed">
-            Все модули бесплатны и открыты для скачивания. Исходники, документация и статьи — по ссылкам ниже.
-          </p>
+      <div class="about-tags">
+        {stack.map((s) => <span class="mono">{s}</span>)}
+      </div>
+    </div>
 
-          <div class="flex flex-wrap gap-3">
-            <a href="#solutions" class="btn-accent">
-              Модули
+    <!-- stats + cta -->
+    <div class="about-r">
+      <div class="about-stats">
+        {stats.map((s) => (
+          <div>
+            <b class="mono">{s.v}</b>
+            <span>{s.l}</span>
+          </div>
+        ))}
+      </div>
+      <div class="about-cta">
+        <p>Все модули бесплатны. Делаю их после основной работы — если хоть один сэкономил вам час, буду рад поддержке.</p>
+        <div class="row">
+          <a class="btn btn-support js-support" href="#">
+            <span class="heart-wrap"><svg class="heart" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+            Поддержать автора
+          </a>
+          <div class="split-btn">
+            <a href="https://t.me/yabramove" target="_blank" rel="noopener noreferrer" title="Написать в Telegram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Telegram
             </a>
-            <a href="https://github.com/Y-Abramov" target="_blank" rel="noopener noreferrer" class="btn-outline">
-              Подробнее
+            <a href="mailto:Yarlif@yandex.ru" title="Написать на почту">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Почта
             </a>
           </div>
         </div>

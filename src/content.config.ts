@@ -18,7 +18,7 @@ const news = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string(),
-    link: z.string().url().optional(),
+    link: z.string().optional(), // absolute URL or site-relative path (e.g. /sp42-...html)
     draft: z.boolean().optional().default(false),
   }),
 });

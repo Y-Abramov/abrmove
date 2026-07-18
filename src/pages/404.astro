@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Страница не найдена — ABR | MOVE" description="Такой точки на трассе нет.">
+  <Header />
+
+  <main>
+    <section class="wrap section-pad nf">
+      <div class="nf-wrap">
+        <div class="nf-plate rv">
+          <svg class="nf-break" viewBox="0 0 600 220" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="nfFade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="var(--paint)" stop-opacity=".6" />
+                <stop offset="1" stop-color="var(--paint)" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <polyline points="0,150 600,130" stroke="var(--ground)" stroke-width="2" opacity=".3" fill="none" />
+            <polyline points="0,168 90,158 180,146 260,132" stroke="var(--paint)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            <g stroke="var(--paint)" stroke-width="2.5" stroke-linecap="round">
+              <line x1="288" y1="132" x2="304" y2="108" />
+              <line x1="300" y1="132" x2="316" y2="108" />
+            </g>
+            <polyline points="322,140 380,152 450,168 520,182 600,198" stroke="url(#nfFade)" stroke-width="2" stroke-dasharray="5 7" fill="none" stroke-linecap="round" />
+            <circle cx="558" cy="189" r="4" fill="none" stroke="var(--paint)" stroke-width="1.6" opacity=".5" />
+          </svg>
+          <div class="nf-code mono">ПК <span class="hl">404</span>+00</div>
+        </div>
+
+        <h1 class="h1 nf-h rv d1">Такой точки на трассе нет</h1>
+        <p class="lead nf-lead rv d2">Ссылка устарела или адрес введён неверно — эта точка не значится ни в одном из проектов.</p>
+
+        <div class="datum rv d2">
+          <span class="station l mono">ПК 403+80</span>
+          <span class="station r mono">ПК 404+20</span>
+        </div>
+
+        <p class="nf-aside rv d2">Точка потеряна, но новости на месте.</p>
+
+        <div class="cta rv d3" style="margin-bottom:0">
+          <a class="btn btn-p" href="/">На главную</a>
+          <a class="btn btn-o" href="/modules">Все модули</a>
+          <a class="btn btn-o" href="/news">Новости</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

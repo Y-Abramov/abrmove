@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import '../styles/theme.css';
+import ScrollTop from '../components/ScrollTop.astro';
 
 interface Props {
   title?: string;
@@ -8,57 +10,155 @@ interface Props {
 
 const {
   title = 'ABR | MOVE: Инструменты для проектирования автомобильных дорог',
-  description = 'Плагины и инструменты для Topomatic Robur и Civil 3D, созданные инженером-проектировщиком для инженеров.',
+  description = 'Модули и инструменты для Топоматик Robur, созданные инженером-проектировщиком для инженеров.',
 } = Astro.props;
+
+const site = Astro.site ?? new URL('https://abrmove.ru');
+const ogImage = new URL('/logo.png', site).href;
+const ogUrl = new URL(Astro.url.pathname, site).href;
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'ABR | MOVE',
+  url: site.href,
+  logo: ogImage,
+  founder: { '@type': 'Person', name: 'Ярослав Абрамов' },
+  sameAs: [
+    'https://t.me/yabramove',
+    'https://www.youtube.com/@Yabramov',
+    'https://rutube.ru/channel/76027270/',
+    'https://github.com/Y-Abramov',
+  ],
+};
 ---
 
 <!doctype html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#09090E" />
+    <meta name="theme-color" content="#0E1116" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; frame-ancestors 'none';" />
     <title>{title}</title>
+
+    <!-- theme init: runs before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('abr-theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ABR | MOVE" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(orgLd)} />
   </head>
-  <body class="bg-base text-gray-1 font-sans antialiased">
+  <body>
     <slot />
+    <ScrollTop />
 
-    <script>
-      // Scroll reveal via Intersection Observer
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-      );
-
-      document.querySelectorAll('.reveal, .reveal-fade').forEach((el) => {
-        observer.observe(el);
-      });
-
-      // Trigger immediately for elements already in viewport on load
-      document.querySelectorAll('.reveal, .reveal-fade').forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight) {
-          el.classList.add('visible');
+    <script is:inline>
+      // theme toggle
+      (function () {
+        var root = document.documentElement;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        var COLORS = { dark: '#0E1116', light: '#F4F6F8' };
+        function apply(theme) {
+          root.setAttribute('data-theme', theme);
+          if (meta) meta.setAttribute('content', COLORS[theme] || COLORS.dark);
+          try { localStorage.setItem('abr-theme', theme); } catch (e) {}
         }
-      });
+        document.addEventListener('click', function (e) {
+          var btn = e.target.closest && e.target.closest('#theme-toggle');
+          if (!btn) return;
+          apply(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        });
+      })();
+
+      // scroll reveal
+      (function () {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        function bind() { document.querySelectorAll('.rv:not(.in)').forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight) el.classList.add('in'); else io.observe(el);
+        }); }
+        bind();
+      })();
+
+      // nav scroll-spy — mirrors public/sp42-2016-vs-2026.html's .navlinks pattern.
+      // Only activates for links whose #hash resolves to a section on THIS page;
+      // links to other pages (e.g. "/#mods" while on /modules/x) are filtered out,
+      // leaving the server-rendered `.on` state (Header's `active` prop) untouched.
+      (function () {
+        var nav = document.querySelector('.hd nav');
+        if (!nav) return;
+        var links = Array.prototype.slice.call(nav.querySelectorAll('a[href*="#"]'));
+        var pairs = links.map(function (a) {
+          var hash = a.getAttribute('href').split('#')[1];
+          var el = hash ? document.getElementById(hash) : null;
+          return el ? { link: a, section: el } : null;
+        }).filter(Boolean);
+        if (!pairs.length) return;
+
+        var HEADER = 60, activeId = null;
+        function setActive(id) {
+          if (id === activeId) return;
+          activeId = id;
+          pairs.forEach(function (p) {
+            var on = p.section.id === id;
+            p.link.classList.toggle('on', on);
+            if (on) p.link.setAttribute('aria-current', 'true'); else p.link.removeAttribute('aria-current');
+          });
+        }
+        function update() {
+          var trigger = HEADER + 40, current = null;
+          for (var i = 0; i < pairs.length; i++) {
+            if (pairs[i].section.getBoundingClientRect().top <= trigger) current = pairs[i];
+          }
+          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+            current = pairs[pairs.length - 1];
+          }
+          setActive(current ? current.section.id : null);
+        }
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () { update(); ticking = false; });
+        }, { passive: true });
+        window.addEventListener('resize', update, { passive: true });
+        update();
+      })();
     </script>
   </body>
 </html>

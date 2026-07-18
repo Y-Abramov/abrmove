@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import News from '../components/News.astro';
+import Footer from '../components/Footer.astro';
+import SupportModal from '../components/SupportModal.astro';
+---
+
+<Layout title="Новости — ABR | MOVE">
+  <Header active="news" />
+
+  <main>
+    <div class="wrap" style="padding-top:26px">
+      <div class="crumb mono"><a href="/">Главная</a> / <b>Новости</b></div>
+    </div>
+    <News />
+  </main>
+
+  <Footer />
+  <SupportModal />
+</Layout>

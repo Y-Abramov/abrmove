@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SupportModal from '../../components/SupportModal.astro';
+import { tools } from '../../data/tools';
+import { downloadHref } from '../../data/counter-endpoint';
+import { getCounterFor } from '../../data/counters';
+
+export function getStaticPaths() {
+  return tools.map((t) => ({ params: { slug: t.slug }, props: { tool: t } }));
+}
+
+const { tool } = Astro.props;
+const downloadCount = await getCounterFor('tool', tool.slug);
+---
+
+<Layout title={`${tool.name} — ABR | MOVE`} description={tool.short}>
+  <Header active="modules" />
+
+  <main>
+    <section class="wrap section-pad">
+      <div style="max-width:820px;margin:0 auto">
+        <div class="crumb mono"><a href="/">Главная</a> / <a href="/tools">Дополнительные инструменты</a> / <b>{tool.name}</b></div>
+        <h1 class="doc-h1">{tool.name}</h1>
+        <div class="badges">
+          {tool.tags.map((tag) => <span class="badge">{tag}</span>)}
+        </div>
+        <p class="doc-lead">{tool.description}</p>
+
+        {tool.download && (
+          <div class="doc-cta">
+            <a class="btn btn-p" href={downloadHref('tool', tool.slug, tool.download)} target="_blank" rel="noopener noreferrer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              {tool.downloadLabel ?? 'Скачать'}
+            </a>
+            <span class="doc-req mono">Проигрыватель Dynamo · вкладка «Управление»</span>
+            {downloadCount > 0 && <span class="doc-req mono">{downloadCount} скачиваний</span>}
+          </div>
+        )}
+
+        {tool.video && (
+          <div class="tool-video">
+            <video controls preload="metadata" src={tool.video} playsinline></video>
+          </div>
+        )}
+
+        <h2 class="i-h2"><span class="n">01</span> Как запустить</h2>
+        <ol class="steps">
+          {tool.steps.map((s) => <li>{s}</li>)}
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <SupportModal />
+</Layout>

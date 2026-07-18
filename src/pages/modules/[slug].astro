@@ -1,0 +1,121 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { modules as staticModules } from '../../data/modules';
+import { getLiveModules } from '../../data/live-modules';
+import { downloadHref } from '../../data/counter-endpoint';
+
+export function getStaticPaths() {
+  return staticModules.map((m) => ({ params: { slug: m.slug } }));
+}
+
+const { slug } = Astro.params;
+const modules = await getLiveModules();
+const mod = modules.find((m) => m.slug === slug);
+if (!mod) return Astro.redirect('/404');
+
+// build TOC entries: sections + faq
+const toc = [
+  ...mod.sections.map((s) => ({ id: s.id, title: s.title })),
+  ...(mod.faq.length ? [{ id: 'faq', title: 'Частые вопросы' }] : []),
+];
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<Layout title={`${mod.title} — ABR | MOVE`} description={mod.short}>
+  <Header active="modules" />
+
+  <div class="docs">
+    <!-- LEFT: module nav -->
+    <aside class="pane left">
+      <div class="grp">Топоматик Robur</div>
+      <ul class="mlist">
+        {modules.map((m) => (
+          <li>
+            <a href={`/modules/${m.slug}`} class={m.slug === mod.slug ? 'on' : ''}>
+              <span>{m.title}</span><span class="v mono">{m.version}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="grp">Autodesk Civil 3D <span class="soon-tag">СКОРО</span></div>
+      <ul class="mlist soon"><li><a><span>Модули в разработке</span></a></li></ul>
+    </aside>
+
+    <!-- CENTER: content -->
+    <main class="pane center">
+      <div class="crumb">Модули <b>/</b> Robur <b>/</b> {mod.title}</div>
+      <h1 class="doc-h1">{mod.title}</h1>
+      <div class="badges">
+        <span class="badge pri">v{mod.version}</span>
+        {mod.compat.map((c) => <span class="badge">{c}</span>)}
+        <span class="badge">Robur {mod.minVersion}+</span>
+      </div>
+      <p class="doc-lead">{mod.lead}</p>
+
+      {mod.download && (
+        <div class="doc-cta">
+          <a class="btn btn-p" href={downloadHref('module', mod.slug, mod.download, mod.version)} target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Скачать v{mod.version}
+          </a>
+          <span class="doc-req mono">Требуется Топоматик Robur {mod.minVersion}+</span>
+        </div>
+      )}
+
+      <div class="doc-shot">
+        {mod.screenshot
+          ? <img src={mod.screenshot} alt={mod.title} />
+          : <span>СКРИНШОТ / ГИФКА · {mod.title}</span>}
+      </div>
+
+      {mod.sections.map((s, i) => (
+        <>
+          <h2 id={s.id}><span class="n">{num(i)}</span>{s.title}</h2>
+          <div set:html={s.html} />
+        </>
+      ))}
+
+      {mod.faq.length > 0 && (
+        <>
+          <h2 id="faq"><span class="n">{num(mod.sections.length)}</span>Частые вопросы</h2>
+          <div class="faq">
+            {mod.faq.map((f, i) => (
+              <details open={i === 0}>
+                <summary>{f.q}<span></span></summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </>
+      )}
+    </main>
+
+    <!-- RIGHT: TOC -->
+    <aside class="pane right">
+      <div class="toc-t">На этой странице</div>
+      <ul class="toc" id="toc">
+        {toc.map((t) => <li><a href={`#${t.id}`}>{t.title}</a></li>)}
+      </ul>
+    </aside>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  const links = Array.from(document.querySelectorAll('#toc a')) as HTMLAnchorElement[];
+  if (links.length) {
+    const map = new Map(links.map((a) => [a.getAttribute('href')!.slice(1), a]));
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          links.forEach((l) => l.classList.remove('on'));
+          map.get((e.target as HTMLElement).id)?.classList.add('on');
+        }
+      });
+    }, { rootMargin: '-72px 0px -70% 0px', threshold: 0 });
+    document.querySelectorAll('.center h2[id]').forEach((h) => spy.observe(h));
+  }
+</script>

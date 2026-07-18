@@ -1,0 +1,513 @@
+{
+  "Uuid": "49c9d00d-e452-455c-a576-0f8d221cc9a4",
+  "IsCustomNode": false,
+  "Description": "Смещение отметок характерных линий и профилей. ",
+  "Name": "Изменение отметок",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "864cbc19f20e41c28de826c6326827f8",
+      "Name": "Выберите характерные линии",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "A287C,A290A",
+      "Description": "Returns a selection of objects",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "d4e541a9ddf449a6b3248c6d39a49a3a",
+      "Name": "Смещение по высоте (м)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "5",
+      "NumberType": "Double",
+      "Description": "Создание числа.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "f25b748fc59e4082aa4f117acec5b395",
+      "Name": "Выберите профили",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "A28F6,A28BD",
+      "Description": "Returns a selection of objects",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "070fef0ec08047c0baa942a98943e3b0",
+      "Name": "Включить профили?",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "false",
+      "Description": "Возможность выбора между значениями True и False",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "e741b80bf37242e996c605c874ede863",
+      "Name": "Внимание!",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "Если профили отсутствуют - выберите любую характерную линию для пропуска.",
+      "Description": "Создание строки.",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\n\r\nclr.AddReference('AcMgd')\r\nclr.AddReference('AcDbMgd')\r\nclr.AddReference('AeccDbMgd')\r\nclr.AddReference('Civil3DNodes')\r\n\r\nimport Autodesk.AutoCAD.ApplicationServices as acApp\r\nfrom Autodesk.Civil.DynamoNodes.LandDevelopment import FeatureLine as C3DFeatureLine\r\n\r\n# ── входные данные ──────────────────────────────────────────\r\nraw_fls = IN[0]\r\ndelta   = float(IN[1])\r\n\r\nif not isinstance(raw_fls, list):\r\n    raw_fls = [raw_fls]\r\ncivil_objects = []\r\nfor item in raw_fls:\r\n    if isinstance(item, list):\r\n        civil_objects.extend(item)\r\n    else:\r\n        civil_objects.append(item)\r\n\r\nacDoc  = acApp.Application.DocumentManager.MdiActiveDocument\r\nreport = []\r\n\r\ntry:\r\n    with acDoc.LockDocument():\r\n        for obj in civil_objects:\r\n            if obj is None:\r\n                continue\r\n            try:\r\n                # Приводим CivilObject → FeatureLine\r\n                fl    = C3DFeatureLine.ByObject(obj)\r\n                pts   = fl.GetAllPoints()\r\n                count = len(pts)\r\n\r\n                report.append(\"DEBUG: fl={} pts={}\".format(fl, count))\r\n\r\n                for i in range(count):\r\n                    fl.SetPointRelativeElevationByIndex(i, delta)\r\n\r\n                report.append(\"OK | FL: {} | точек: {}\".format(fl.Name, count))\r\n            except Exception as fl_ex:\r\n                report.append(\"ERR | \" + str(fl_ex))\r\n\r\nexcept Exception as lock_ex:\r\n    report = [\"LOCK ERROR: \" + str(lock_ex)]\r\n\r\nOUT = report",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "9a7a864377534ea88450cedb1293a13c",
+      "Inputs": [
+        {
+          "Id": "e8f108b2168243328b2f959be65c3252",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8544d173a9f744d18afd67c89ed4bf8d",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "15d397c62b3241dfb7469f191bebd049",
+          "Name": "OUT",
+          "Description": "Результат сценария Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Выполнение встроенного сценария Python."
+    },
+    {
+      "ConcreteType": "Autodesk.AutoCAD.DynamoNodes.ObjectsSelection, Autodesk.Civil3DToolkitUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "A287C",
+        "A290A"
+      ],
+      "Id": "864cbc19f20e41c28de826c6326827f8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "43eda36383294544b73f0867507b5303",
+          "Name": "Objects",
+          "Description": "Objects",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "77e4ec751a194c8dbf614b0c71f4fa6e",
+      "Inputs": [
+        {
+          "Id": "92c6f9f57fe2415b873df1ad924693ba",
+          "Name": "",
+          "Description": "Узел для отображения выходных данных",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b87c1df085434b759603f0a9d718d9c7",
+          "Name": "",
+          "Description": "Выходные данные узла",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Визуализация выходных данных узла"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 5.0,
+      "Id": "d4e541a9ddf449a6b3248c6d39a49a3a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c778d75cf5764c529eee18f6255a3e25",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Создание числа."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\n\r\nclr.AddReference('AcMgd')\r\nclr.AddReference('AcDbMgd')\r\nclr.AddReference('AeccDbMgd')\r\nclr.AddReference('Civil3DNodes')\r\n\r\nimport Autodesk.AutoCAD.ApplicationServices as acApp\r\nimport Autodesk.AutoCAD.DatabaseServices as acDb\r\n\r\nraw_profiles = IN[0]\r\ndelta        = float(IN[1])\r\nenabled      = IN[2]\r\n\r\nif not enabled:\r\n    OUT = [\"Профили: пропущено\"]\r\nelse:\r\n    if not isinstance(raw_profiles, list):\r\n        raw_profiles = [raw_profiles]\r\n\r\n    civil_objects = []\r\n    for item in raw_profiles:\r\n        if isinstance(item, list):\r\n            civil_objects.extend(item)\r\n        else:\r\n            civil_objects.append(item)\r\n\r\n    acDoc  = acApp.Application.DocumentManager.MdiActiveDocument\r\n    report = []\r\n\r\n    try:\r\n        with acDoc.LockDocument():\r\n            with acDoc.Database.TransactionManager.StartTransaction() as tr:\r\n                try:\r\n                    for obj in civil_objects:\r\n                        if obj is None:\r\n                            continue\r\n                        try:\r\n                            oid         = obj.InternalObjectId\r\n                            native_prof = tr.GetObject(\r\n                                oid, acDb.OpenMode.ForWrite)\r\n                            pvi_col     = native_prof.PVIs\r\n                            pvi_count   = pvi_col.Count\r\n                            for idx in range(pvi_count):\r\n                                pvi = pvi_col[idx]\r\n                                pvi.Elevation = pvi.Elevation + delta\r\n                            report.append(\"OK | Profile: {} | PVI: {}\".format(\r\n                                native_prof.Name, pvi_count))\r\n                        except Exception as p_ex:\r\n                            report.append(\"ERR | \" + str(p_ex))\r\n                    tr.Commit()\r\n                except Exception as tx_ex:\r\n                    report.append(\"TRANSACTION ERROR: \" + str(tx_ex))\r\n                    tr.Abort()\r\n    except Exception as lock_ex:\r\n        report = [\"LOCK ERROR: \" + str(lock_ex)]\r\n\r\n    OUT = report",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "3d34429372ee449e85f1ff6c941c9549",
+      "Inputs": [
+        {
+          "Id": "b839a3f8d59b4e31914311d60feac74c",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e6bb6fd78a6c420abca19d116bdfa6b2",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8d350b61e7a249c0a34bf144717c8241",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "88e5e430deb142ba94880253041ff2c0",
+          "Name": "OUT",
+          "Description": "Результат сценария Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Выполнение встроенного сценария Python."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "912e3a73286448a38e9a97abeda7f33d",
+      "Inputs": [
+        {
+          "Id": "dd9995fb7fc74ebd8075fb6778a684fb",
+          "Name": "",
+          "Description": "Узел для отображения выходных данных",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3c999cb5c8d7473a9790c2adf806cea5",
+          "Name": "",
+          "Description": "Выходные данные узла",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Визуализация выходных данных узла"
+    },
+    {
+      "ConcreteType": "Autodesk.AutoCAD.DynamoNodes.ObjectsSelection, Autodesk.Civil3DToolkitUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "A28F6",
+        "A28BD"
+      ],
+      "Id": "f25b748fc59e4082aa4f117acec5b395",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bb6484afd61a484e97f6409ad5451c09",
+          "Name": "Objects",
+          "Description": "Objects",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "070fef0ec08047c0baa942a98943e3b0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7927fa54577243cc9c3d60104087fd5f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Возможность выбора между значениями True и False"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Если профили отсутствуют - выберите любую характерную линию для пропуска.",
+      "Id": "e741b80bf37242e996c605c874ede863",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ba9a85af01eb4c80b70e9ae619fb7fd9",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Создание строки."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "15d397c62b3241dfb7469f191bebd049",
+      "End": "92c6f9f57fe2415b873df1ad924693ba",
+      "Id": "01da89ad5d7b4065879247252ecd394e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "43eda36383294544b73f0867507b5303",
+      "End": "e8f108b2168243328b2f959be65c3252",
+      "Id": "04f887af00244b2eb8b4303ba4db649e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c778d75cf5764c529eee18f6255a3e25",
+      "End": "8544d173a9f744d18afd67c89ed4bf8d",
+      "Id": "b26161c3b19b41478e0da64eceeb14b8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c778d75cf5764c529eee18f6255a3e25",
+      "End": "e6bb6fd78a6c420abca19d116bdfa6b2",
+      "Id": "e2b0ddd63e384d629d9837884a47f014",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "88e5e430deb142ba94880253041ff2c0",
+      "End": "dd9995fb7fc74ebd8075fb6778a684fb",
+      "Id": "40b685ff2c3744e79ba1b6d159917d9d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bb6484afd61a484e97f6409ad5451c09",
+      "End": "b839a3f8d59b4e31914311d60feac74c",
+      "Id": "4f6e8c4cabc14685aa05819b888abc67",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7927fa54577243cc9c3d60104087fd5f",
+      "End": "8d350b61e7a249c0a34bf144717c8241",
+      "Id": "ea5c3de17c844e199580a572a40d8e1a",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Civil3DToolkit",
+      "Version": "1.1.32",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "864cbc19f20e41c28de826c6326827f8",
+        "f25b748fc59e4082aa4f117acec5b395"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": "https://t.me/yabramov22",
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {
+        "RunType": "Manual",
+        "RunPeriod": "1000",
+        "EnablePeriodicRun": "False"
+      }
+    }
+  ],
+  "Author": "Abramov Y.I",
+  "Linting": {
+    "activeLinter": "Нет",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 100.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.17.0.3472",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Фоновый просмотр",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Id": "9a7a864377534ea88450cedb1293a13c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 12127.5889742115,
+        "Y": 9236.76362775216
+      },
+      {
+        "Name": "Выберите характерные линии",
+        "ShowGeometry": true,
+        "Id": "864cbc19f20e41c28de826c6326827f8",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11618.997422764218,
+        "Y": 9100.126525914975
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "77e4ec751a194c8dbf614b0c71f4fa6e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 12513.728766376,
+        "Y": 9132.72624694535
+      },
+      {
+        "Name": "Смещение по высоте (м)",
+        "ShowGeometry": true,
+        "Id": "d4e541a9ddf449a6b3248c6d39a49a3a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11753.9667595604,
+        "Y": 9467.2377084762
+      },
+      {
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Id": "3d34429372ee449e85f1ff6c941c9549",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 12140.4451627594,
+        "Y": 9628.81422449495
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "912e3a73286448a38e9a97abeda7f33d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 12455.7541725094,
+        "Y": 9611.92490282734
+      },
+      {
+        "Name": "Выберите профили",
+        "ShowGeometry": true,
+        "Id": "f25b748fc59e4082aa4f117acec5b395",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11439.402054782611,
+        "Y": 9835.0195442808581
+      },
+      {
+        "Name": "Включить профили?",
+        "ShowGeometry": true,
+        "Id": "070fef0ec08047c0baa942a98943e3b0",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11454.300527478052,
+        "Y": 9623.7105337598714
+      },
+      {
+        "Name": "Внимание!",
+        "ShowGeometry": true,
+        "Id": "e741b80bf37242e996c605c874ede863",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11464.106109554914,
+        "Y": 9294.808467967121
+      }
+    ],
+    "Annotations": [],
+    "X": -8424.9783133286946,
+    "Y": -6643.3327997689885,
+    "Zoom": 0.73866658361501913
+  }
+}

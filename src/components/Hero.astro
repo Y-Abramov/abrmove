@@ -1,99 +1,150 @@
 ---
+// Build-time download counter (server-side fetch — CSP untouched): sums
+// legacy GitHub Releases download_count with the Yandex counter-function
+// total, so the number stays correct through the Yandex-primary migration.
+import { MODULE_REPOS } from '../data/repos';
+import { getYandexModuleTotal } from '../data/counters';
+const repos = Object.values(MODULE_REPOS);
+let downloads = 0;
+try {
+  const lists = await Promise.all(
+    repos.map((r) =>
+      fetch(`https://api.github.com/repos/Y-Abramov/${r}/releases`, {
+        headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'abr-move-site' },
+      }).then((res) => (res.ok ? res.json() : []))
+    )
+  );
+  for (const rel of lists.flat()) {
+    for (const a of rel?.assets ?? []) downloads += a.download_count ?? 0;
+  }
+} catch {
+  downloads = 0;
+}
+downloads += await getYandexModuleTotal();
 ---
 
-<section id="hero" class="relative min-h-screen flex flex-col justify-center overflow-hidden bg-base pt-14">
-
-  <!-- Fine grid background -->
-  <div class="absolute inset-0 bg-grid-fine bg-grid-48 pointer-events-none opacity-100"></div>
-
-  <!-- Accent glow — top center -->
-  <div class="absolute inset-0 bg-glow-center pointer-events-none"></div>
-
-  <!-- Road SVG — right side decorative -->
-  <div class="absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none select-none overflow-hidden opacity-[0.07]">
-    <svg viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute right-0 top-1/2 -translate-y-1/2 w-full h-full">
-      <path d="M300 0 L80 800" stroke="white" stroke-width="2.5"/>
-      <path d="M300 0 L520 800" stroke="white" stroke-width="2.5"/>
-      <path d="M300 0 L300 800" stroke="white" stroke-width="1.5" stroke-dasharray="18 12"/>
-      <path d="M300 0 L160 800" stroke="white" stroke-width="1" opacity="0.5"/>
-      <path d="M300 0 L440 800" stroke="white" stroke-width="1" opacity="0.5"/>
-    </svg>
-  </div>
-
-  <!-- Giant watermark logo -->
-  <div class="absolute inset-0 flex items-center justify-end pr-12 pointer-events-none select-none">
-    <img src="/logo-mark.svg" alt="" class="w-[480px] h-[480px] opacity-[0.025]" aria-hidden="true" />
-  </div>
-
-  <!-- Content -->
-  <div class="relative max-w-7xl mx-auto px-6 lg:px-8 w-full py-24 lg:py-32">
-
-    <!-- Tag -->
-    <div class="reveal flex items-center gap-3 mb-8">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 border border-accent-dim bg-accent-glow font-mono text-[10px] tracking-widest2 uppercase text-accent">
-        <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
-        Topomatic Robur · Civil 3D
-      </span>
+<section id="hero" class="wrap hero">
+  <div class="hero-grid">
+    <div>
+      <h1 class="h1 rv d1">Меньше рутины в <span class="g">Топоматик&nbsp;Robur</span></h1>
+      <p class="lead rv d2">Модули, которые убирают рутину в проектной работе. Сделаны практикующим инженером под реальные задачи, а не «вообще».</p>
+      <div class="cta rv d3">
+        <a class="btn btn-p" href="#mods">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Скачать модули
+        </a>
+        <a class="btn btn-o" href="/modules/abr-modules">Как установить</a>
+      </div>
+      <div class="hstats rv d4">
+        <div><b>5</b><span>модулей</span></div>
+        <div><b>16.0.62.12</b><span>версия Robur</span></div>
+        <div><b>Free</b><span>всё бесплатно</span></div>
+        {downloads > 0 && <div><b class="hl">{downloads.toLocaleString('ru-RU')}</b><span>загрузок</span></div>}
+      </div>
     </div>
 
-    <!-- Headline -->
-    <div class="mb-8">
-      <h1 class="reveal reveal-delay-1 font-bold text-white leading-[1.05] tracking-tight"
-          style="font-size: clamp(2.4rem, 5.5vw, 5rem);">
-        Инструменты<br/>
-        для проектирования<br/>
-        <span class="text-gray-3">дорог в Topomatic<br/>Robur</span>
-      </h1>
-    </div>
+    <!-- LIVE DEMO: plan + profile with synced cursor -->
+    <div class="demo rv d2" id="demo">
+      <div class="demo-top">
+        <span><span class="dt-tag">●</span> ОТСЛЕЖИВАНИЕ КУРСОРА</span>
+        <span class="demo-readout mono" id="readout">ПК 03+42 · H 128.40</span>
+      </div>
+      <div class="demo-body">
+        <span class="pane-lbl" style="top:8px">ПЛАН</span>
+        <span class="pane-lbl" style="top:calc(50% + 8px)">ПРОФИЛЬ</span>
+        <span class="demo-hint" id="demoHint">← двигай мышью →</span>
+        <svg viewBox="0 0 560 360" id="demoSvg" preserveAspectRatio="none">
+          <defs>
+            <pattern id="cad" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M28 0H0V28" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="560" height="360" fill="url(#cad)"/>
+          <line x1="0" y1="180" x2="560" y2="180" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="4 4"/>
 
-    <!-- Subtitle -->
-    <p class="reveal reveal-delay-2 text-gray-2 text-sm leading-relaxed max-w-lg mb-10 font-mono">
-      Плагины и скрипты, которые ускоряют работу и&nbsp;экономят время инженера.
-      Созданы практикующим проектировщиком.
-    </p>
+          <!-- PLAN: road alignment (top half) -->
+          <path id="plan" d="M20 150 C120 150 150 40 260 60 S440 150 540 70" fill="none" stroke="var(--ground)" stroke-width="10" stroke-linecap="round" opacity=".35"/>
+          <path d="M20 150 C120 150 150 40 260 60 S440 150 540 70" fill="none" stroke="var(--paint)" stroke-width="1.5" stroke-dasharray="7 7" opacity=".8"/>
 
-    <!-- CTAs -->
-    <div class="reveal reveal-delay-3 flex flex-wrap items-center gap-3 mb-16">
-      <a href="#downloads" class="btn-accent">
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
+          <!-- PROFILE: ground + design grade (bottom half) -->
+          <polyline points="20,320 120,308 200,300 280,286 360,296 440,278 540,270" fill="none" stroke="var(--ground)" stroke-width="2"/>
+          <polyline id="grade" points="20,315 120,300 200,296 280,278 360,282 440,268 540,258" fill="none" stroke="var(--grade)" stroke-width="2"/>
+
+          <g id="curPlan">
+            <line x1="-560" y1="0" x2="560" y2="0" stroke="var(--paint)" stroke-width="1" opacity=".5"/>
+            <circle r="5" fill="none" stroke="var(--paint)" stroke-width="1.6"/>
+            <circle r="1.6" fill="var(--paint)"/>
+          </g>
+          <g id="curProf">
+            <line x1="0" y1="180" x2="0" y2="360" stroke="var(--paint)" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>
+            <circle id="profDot" cx="0" cy="290" r="4" fill="var(--paint)"/>
+          </g>
         </svg>
-        Скачать модули
-      </a>
-      <a href="#solutions" class="btn-outline">
-        Подробнее
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <!-- Stats strip -->
-    <div class="reveal reveal-delay-4 border-t border-line pt-8 grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-line">
-      {[
-        { v: '10+', l: 'лет опыта' },
-        { v: '5', l: 'модулей' },
-        { v: '50+', l: 'проектов' },
-        { v: 'Free', l: 'для скачивания' },
-      ].map((s) => (
-        <div class="px-6 first:pl-0 flex flex-col gap-0.5">
-          <span class="font-mono font-bold text-white text-xl">{s.v}</span>
-          <span class="font-mono text-[11px] text-gray-3">{s.l}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Bottom platforms strip -->
-  <div class="relative border-t border-line bg-surface/40">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="flex items-center gap-0 divide-x divide-line overflow-x-auto">
-        {['Topomatic Robur', 'Autodesk Civil 3D', 'BIM', 'Dynamo', '.NET / C#'].map((p) => (
-          <span class="px-6 py-3 font-mono text-[11px] text-gray-3 whitespace-nowrap shrink-0">{p}</span>
-        ))}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const svg = document.getElementById('demoSvg') as SVGSVGElement | null;
+  const plan = document.getElementById('plan') as unknown as SVGPathElement | null;
+  const grade = document.getElementById('grade');
+  if (svg && plan && grade) {
+    const curPlan = document.getElementById('curPlan')!;
+    const curProf = document.getElementById('curProf')!;
+    const profDot = document.getElementById('profDot')!;
+    const readout = document.getElementById('readout')!;
+    const body = document.querySelector('.demo-body') as HTMLElement;
+    const hint = document.getElementById('demoHint');
+
+    const gpts = grade.getAttribute('points')!.trim().split(' ').map((p) => p.split(',').map(Number));
+    const X0 = 20, X1 = 540, L = plan.getTotalLength();
+    const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    function gradeY(x: number) {
+      for (let i = 0; i < gpts.length - 1; i++) {
+        const [a, ya] = gpts[i], [b, yb] = gpts[i + 1];
+        if (x >= a && x <= b) return ya + (yb - ya) * ((x - a) / (b - a));
+      }
+      return gpts[gpts.length - 1][1];
+    }
+
+    function frame(t: number) {
+      const pt = plan!.getPointAtLength(t * L);
+      curPlan.setAttribute('transform', `translate(${pt.x},${pt.y})`);
+      const x = X0 + t * (X1 - X0), y = gradeY(x);
+      curProf.setAttribute('transform', `translate(${x},0)`);
+      profDot.setAttribute('cy', String(y));
+      const pk = t * 3.5, pkw = Math.floor(pk), pkm = Math.round((pk - pkw) * 100);
+      const h = (340 - y) * 0.6 + 118;
+      readout.textContent = `ПК 0${pkw}+${String(pkm).padStart(2, '0')} · H ${h.toFixed(2)}`;
+    }
+
+    let interactive = false, curT = 0.4, auto0: number | null = null;
+    const dur = 7200;
+    function render(t: number) { curT = t; frame(t); }
+
+    function onMove(e: PointerEvent | TouchEvent) {
+      const r = svg!.getBoundingClientRect();
+      const cx = 'touches' in e ? e.touches[0].clientX : (e as PointerEvent).clientX;
+      let t = (cx - r.left) / r.width;
+      t = Math.max(0, Math.min(1, t));
+      interactive = true;
+      if (hint) hint.style.opacity = '0';
+      render(t);
+    }
+    body.addEventListener('pointermove', onMove as EventListener);
+    body.addEventListener('touchmove', onMove as EventListener, { passive: true });
+    body.addEventListener('pointerleave', () => { interactive = false; auto0 = null; });
+
+    function loop(ts: number) {
+      if (!interactive) {
+        if (auto0 === null) auto0 = ts - (curT / 2) * dur;
+        const p = ((ts - auto0) % dur) / dur;
+        render(p < 0.5 ? p * 2 : (1 - p) * 2);
+      }
+      requestAnimationFrame(loop);
+    }
+    if (reduce) render(0.4); else requestAnimationFrame(loop);
+  }
+</script>

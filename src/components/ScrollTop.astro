@@ -1,0 +1,40 @@
+---
+---
+
+<button id="gotop" class="gotop" type="button" aria-label="Наверх">
+  <span class="gotop-label mono">Наверх</span>
+  <svg class="gotop-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  <span class="gotop-bar"><span class="gotop-fill"></span></span>
+</button>
+
+<script>
+  // Fill bar reports real scroll progress of the document — same station/datum
+  // spine language used elsewhere as the site's signature device, not decoration.
+  (function () {
+    const btn = document.getElementById('gotop');
+    const fill = btn?.querySelector<HTMLElement>('.gotop-fill');
+    if (!btn || !fill) return;
+    const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    function update() {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const pct = max > 0 ? Math.min(1, doc.scrollTop / max) : 0;
+      fill!.style.transform = `scaleX(${pct})`;
+      btn!.classList.toggle('show', doc.scrollTop > 560);
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  })();
+</script>

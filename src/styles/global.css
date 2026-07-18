@@ -3,22 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  /* Theme colors live in theme.css (CSS variables on [data-theme]).
+     Keep only the font-smoothing defaults here. */
   html {
-    background-color: #09090E;
-    color: #E2E4EF;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
-  ::selection {
-    background-color: rgba(34, 211, 238, 0.2);
-    color: #fff;
-  }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #09090E; }
-  ::-webkit-scrollbar-thumb { background: #1C1F2E; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #282D45; }
 }
 
 @layer utilities {

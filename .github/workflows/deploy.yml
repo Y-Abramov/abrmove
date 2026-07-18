@@ -17,6 +17,10 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ru-central1
+      # Optional: set once functions/download-counter is deployed (not a secret,
+      # it's the public invoke URL) — Settings > Actions > Variables. Unset is fine,
+      # downloadHref() falls back to direct links with no count.
+      PUBLIC_COUNTER_URL: ${{ vars.PUBLIC_COUNTER_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

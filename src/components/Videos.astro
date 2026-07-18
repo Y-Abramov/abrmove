@@ -1,0 +1,80 @@
+---
+// Real videos: fill youtubeId + title + date. Placeholder slots render until then.
+// Thumbnail auto-derives from youtubeId; or set `thumb` to a /public path.
+interface Video {
+  title: string;
+  date?: string;
+  youtubeId?: string;
+  thumb?: string;
+}
+
+// Порядок: новые первыми.
+const videos: Video[] = [
+  { title: 'Визуализация дороги только по чертежам. Нейросеть справилась?', youtubeId: 'IZwhJYVS1ow', thumb: '/videos/IZwhJYVS1ow.jpg' },
+  { title: 'Модули ABRMove для Топоматик Robur', youtubeId: 'lxNTjEyfw44', thumb: '/videos/lxNTjEyfw44.jpg' },
+  { title: 'Мой первый плагин в Топоматик Robur / RoadStyle', youtubeId: 'McpHM62FNrc', thumb: '/videos/McpHM62FNrc.jpg' },
+  { title: 'Анализ баттла Civil3D vs Robur', youtubeId: 'D-5F-CcuPqs', thumb: '/videos/D-5F-CcuPqs.jpg' },
+  { title: 'ВБ в Топоматик Robur', youtubeId: 'SiK2aK5E9JE', thumb: '/videos/SiK2aK5E9JE.jpg' },
+];
+
+const channel = 'https://www.youtube.com/@Yabramov';
+const rutube = 'https://rutube.ru/channel/76027270/';
+const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+const ytUrl = (id: string) => `https://www.youtube.com/watch?v=${id}`;
+---
+
+<section id="video" class="wrap section-pad">
+  <div class="sec-head rv">
+    <div>
+      <div class="sec-k">// ВИДЕО</div>
+      <h2>Как это работает на видео</h2>
+    </div>
+    <div class="vids-nav" aria-hidden="true">
+      <button type="button" data-dir="-1" aria-label="Назад">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button type="button" data-dir="1" aria-label="Вперёд">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="vids-wrap rv d1">
+    <div class="vids" id="vids">
+      {videos.map((v) => {
+        const href = v.youtubeId ? ytUrl(v.youtubeId) : channel;
+        const thumb = v.thumb ?? (v.youtubeId ? ytThumb(v.youtubeId) : undefined);
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer" class="vid">
+            <div class="vthumb">
+              {thumb && <img src={thumb} alt={v.title} loading="lazy" />}
+              <span class="vplay">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg>
+              </span>
+              {!v.youtubeId && <span class="vph mono">СКОРО</span>}
+            </div>
+            <div class="vmeta">
+              <span class="vt">{v.title}</span>
+              <span class="vd mono">{v.date ?? 'YouTube · @Yabramov'}</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+
+  <div class="pt-more rv d2">
+    <a class="btn" href={channel} target="_blank" rel="noopener noreferrer">Все видео на YouTube <span class="arw">→</span></a>
+    <a class="btn" href={rutube} target="_blank" rel="noopener noreferrer">Все видео на Rutube <span class="arw">→</span></a>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('vids');
+  document.querySelectorAll<HTMLButtonElement>('.vids-nav button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.dir) || 1;
+      track?.scrollBy({ left: dir * 316, behavior: 'smooth' });
+    });
+  });
+</script>

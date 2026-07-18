@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SupportModal from '../../components/SupportModal.astro';
+import { getLiveModules } from '../../data/live-modules';
+import { downloadHref } from '../../data/counter-endpoint';
+
+const modules = await getLiveModules();
+const roburModules = modules.filter((m) => m.platform === 'robur');
+const boxIcon = 'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z';
+const dlIcon = 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4';
+---
+
+<Layout title="Все модули — ABR | MOVE">
+  <Header active="modules" />
+
+  <main>
+    <section class="wrap section-pad">
+      <div style="max-width:960px;margin:0 auto">
+        <div class="crumb mono"><a href="/">Главная</a> / <b>Все модули</b></div>
+        <h1 class="doc-h1">Все модули</h1>
+        <p class="doc-lead">Модули ABR для Топоматик Robur. Ставятся через Библиотеку модулей — дальше устанавливаются и обновляются автоматически. Нажмите, чтобы открыть инструкцию.</p>
+
+        <div class="ptabs seg-nav" role="tablist" aria-label="Раздел каталога">
+          <a class="ptab on" href="/modules" aria-current="page">Все модули</a>
+          <a class="ptab" href="/tools">Дополнительные инструменты</a>
+        </div>
+
+        <div class="mgrp">
+          <span class="mgrp-t mono">Топоматик Robur</span>
+          <span class="mgrp-c mono">{roburModules.length}</span>
+        </div>
+        <div class="mlist2">
+          {roburModules.map((m) => (
+            <div class="mrow">
+              <a class="mrow-main" href={`/modules/${m.slug}`}>
+                <span class="mrow-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={boxIcon}/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+                <span class="mrow-b">
+                  <span class="mrow-t">{m.title}{m.hit && <span class="flag mono">ХИТ</span>}</span>
+                  <span class="mrow-d">{m.short}</span>
+                </span>
+              </a>
+              <div class="mrow-meta">
+                <span class="mrow-tags"><span class="badge">{m.compatShort}</span></span>
+                <span class="mrow-v">v{m.version}</span>
+                {m.download && (
+                  <a class="mrow-dl" href={downloadHref('module', m.slug, m.download, m.version)} target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d={dlIcon}/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>.TPM</a>
+                )}
+                <a class="mrow-more mono" href={`/modules/${m.slug}`}>Открыть →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mgrp soon">
+          <span class="mgrp-t mono">Autodesk Civil 3D</span>
+          <span class="mgrp-c mono">СКОРО</span>
+        </div>
+        <div class="mempty">Модули под Civil 3D в разработке.</div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <SupportModal />
+</Layout>
