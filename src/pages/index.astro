@@ -1,37 +1,51 @@
 ---
+// Placeholder — full homepage parked in _index-full.astro (not routed, Astro
+// skips "_"-prefixed pages files). Restore by swapping this file's content
+// back for that file's when reopening. No Header/Footer on purpose — logo,
+// "site in progress" animation, and 2 links only, per explicit request.
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import PluginsTable from '../components/PluginsTable.astro';
-import News from '../components/News.astro';
-import Videos from '../components/Videos.astro';
-import Footer from '../components/Footer.astro';
 import SupportModal from '../components/SupportModal.astro';
+
+const gh = 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12';
 ---
 
-<Layout title="ABR | MOVE: Инструменты для проектирования дорог">
-  <Header active="home" />
+<Layout title="ABR | MOVE — сайт в разработке" description="Модули и инструменты для Топоматик Robur.">
+  <main class="stub">
+    <img class="stub-logo" src="/logo-lockup.svg" alt="ABR | MOVE" />
 
-  <main>
-    <div class="wrap" style="padding-top:30px"><div class="datum"><span class="station l mono">ПК 0+00</span><span class="station r mono">НАЧАЛО ТРАССЫ</span></div></div>
-    <Hero />
+    <!-- signature: an alignment being surveyed — flowing centerline + sweeping station -->
+    <div class="wip" role="img" aria-label="Сайт в разработке">
+      <svg viewBox="0 0 560 150" preserveAspectRatio="none" aria-hidden="true">
+        <!-- ground alignment (faint) -->
+        <path class="wip-ground" d="M14 96 C120 96 150 34 270 44 S470 118 546 58" />
+        <!-- paint centerline, flowing -->
+        <path class="wip-dash" d="M14 96 C120 96 150 34 270 44 S470 118 546 58" />
+        <!-- sweeping survey station -->
+        <g class="wip-marker">
+          <line x1="0" y1="8" x2="0" y2="142" />
+          <circle class="wip-ring" cx="0" cy="18" r="5" />
+          <circle class="wip-dot" cx="0" cy="18" r="1.8" />
+        </g>
+      </svg>
+      <span class="wip-tag mono"><span class="wip-blip"></span>СЪЁМКА ТРАССЫ</span>
+    </div>
 
-    <div class="wrap"><div class="datum"><span class="station l mono">ПК 1+00</span><span class="station r mono">О АВТОРЕ</span></div></div>
-    <About />
+    <div class="wip-copy">
+      <h1 class="wip-title">Сайт в разработке</h1>
+      <p class="wip-sub">Готовим обновление. Модули и инструменты работают как обычно.</p>
+    </div>
 
-    <div class="wrap"><div class="datum"><span class="station l mono">ПК 2+00</span><span class="station r mono">МОДУЛИ · ТОП 03</span></div></div>
-    <PluginsTable />
-
-    <div class="wrap"><div class="datum"><span class="station l mono">ПК 3+00</span><span class="station r mono">НОВОСТИ</span></div></div>
-    <News limit={3} />
-
-    <div class="wrap"><div class="datum"><span class="station l mono">ПК 4+00</span><span class="station r mono">ВИДЕО</span></div></div>
-    <Videos />
-
-    <div class="wrap"><div class="datum"><span class="station l mono">ПК 5+00</span><span class="station r mono">КОНЕЦ ТРАССЫ</span></div></div>
+    <div class="cta" style="margin-bottom:0;justify-content:center">
+      <a class="btn btn-o" href="https://github.com/Y-Abramov" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={gh}/></svg>
+        Модули на GitHub
+      </a>
+      <a class="btn btn-support js-support" href="#">
+        <span class="heart-wrap"><svg class="heart" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+        Поддержать
+      </a>
+    </div>
   </main>
 
-  <Footer />
   <SupportModal />
 </Layout>

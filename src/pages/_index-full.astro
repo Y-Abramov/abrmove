@@ -1,0 +1,41 @@
+---
+// Full homepage, parked here while / shows a placeholder (see index.astro).
+// Astro ignores files/dirs starting with "_" under src/pages — not routed,
+// content preserved verbatim for restore: copy this file's body back into
+// index.astro (or rename this file to index.astro, delete the stub) when reopening.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import PluginsTable from '../components/PluginsTable.astro';
+import News from '../components/News.astro';
+import Videos from '../components/Videos.astro';
+import Footer from '../components/Footer.astro';
+import SupportModal from '../components/SupportModal.astro';
+---
+
+<Layout title="ABR | MOVE: Инструменты для проектирования дорог">
+  <Header active="home" />
+
+  <main>
+    <div class="wrap" style="padding-top:30px"><div class="datum"><span class="station l mono">ПК 0+00</span><span class="station r mono">НАЧАЛО ТРАССЫ</span></div></div>
+    <Hero />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 1+00</span><span class="station r mono">О АВТОРЕ</span></div></div>
+    <About />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 2+00</span><span class="station r mono">МОДУЛИ · ТОП 03</span></div></div>
+    <PluginsTable />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 3+00</span><span class="station r mono">НОВОСТИ</span></div></div>
+    <News limit={3} />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 4+00</span><span class="station r mono">ВИДЕО</span></div></div>
+    <Videos />
+
+    <div class="wrap"><div class="datum"><span class="station l mono">ПК 5+00</span><span class="station r mono">КОНЕЦ ТРАССЫ</span></div></div>
+  </main>
+
+  <Footer />
+  <SupportModal />
+</Layout>
