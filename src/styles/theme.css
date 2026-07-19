@@ -86,7 +86,7 @@ img{max-width:100%}
 @media(max-width:820px){.hd nav.hd-nav{display:none}.burger{display:flex}}
 
 /* ---------- hero ---------- */
-.hero{position:relative;padding:14px 0 0}
+.hero{position:relative;padding-top:14px}
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center;padding:64px 0 72px}
 @media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:44px 0 52px}}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--paint);border:1px solid var(--paint-line);background:var(--paint-soft);padding:6px 11px;margin-bottom:26px}
@@ -387,7 +387,9 @@ img{max-width:100%}
 .vids-nav button:hover{border-color:var(--paint);color:var(--paint)}
 
 /* ---------- footer: signature sign-off ---------- */
-.foot-inner{padding:56px 0 44px}
+/* vertical only — same .wrap horizontal-padding collision as .section-pad */
+.foot-inner{padding-top:56px;padding-bottom:44px}
+@media(max-width:560px){.foot-inner{padding-top:36px;padding-bottom:28px}}
 .foot-top{display:flex;align-items:center;justify-content:space-between;gap:24px 40px;flex-wrap:wrap}
 .foot-brand img{height:42px;width:auto;display:block;filter:invert(1)}
 :root[data-theme="light"] .foot-brand img{filter:none}
