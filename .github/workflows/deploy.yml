@@ -29,9 +29,17 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Sync to Yandex Object Storage
+      - name: Sync hashed assets (long cache — filenames are content-hashed, safe to cache forever)
+        run: |
+          aws s3 sync ./dist s3://abrmove-modules \
+            --endpoint-url https://storage.yandexcloud.net \
+            --acl public-read \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*" --include "_astro/*"
+      - name: Sync pages (no-cache — CDN must revalidate every request, or deploys never show up)
         run: |
           aws s3 sync ./dist s3://abrmove-modules \
             --endpoint-url https://storage.yandexcloud.net \
             --acl public-read --delete \
-            --exclude "catalog.json" --exclude "tpm/*"
+            --cache-control "no-cache" \
+            --exclude "_astro/*" --exclude "catalog.json" --exclude "tpm/*"
