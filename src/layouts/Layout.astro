@@ -41,8 +41,21 @@ const orgLd = {
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0E1116" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; frame-ancestors 'none';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://mc.yandex.ru; connect-src https://mc.yandex.ru; frame-ancestors 'none';" />
     <title>{title}</title>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" is:inline>
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110864438', 'ym');
+
+        ym(110864438, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <!-- /Yandex.Metrika counter -->
 
     <!-- theme init: runs before paint to avoid flash -->
     <script is:inline>
@@ -80,6 +93,8 @@ const orgLd = {
     <script type="application/ld+json" is:inline set:html={JSON.stringify(orgLd)} />
   </head>
   <body>
+    <noscript><div><img src="https://mc.yandex.ru/watch/110864438" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
     <slot />
     <ScrollTop />
 
