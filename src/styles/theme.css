@@ -66,7 +66,24 @@ img{max-width:100%}
 :root:not([data-theme="light"]) .tgl .icon-moon{display:block}
 .dl-sm{font-size:12.5px;font-weight:600;border:1px solid var(--line-strong);padding:8px 14px;color:var(--fg);transition:.15s}
 .dl-sm:hover{border-color:var(--paint);color:var(--paint)}
-@media(max-width:820px){.hd nav{display:none}}
+
+/* mobile nav: burger + slide-down menu */
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:34px;height:34px;padding:0;border:1px solid var(--line-strong);background:var(--panel);cursor:pointer}
+.burger span{display:block;width:16px;height:2px;background:var(--fg);margin:0 auto;transition:transform .2s ease,opacity .2s ease}
+.burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.hd-menu{display:none;flex-direction:column;border-top:1px solid var(--line);background:var(--ink)}
+.hd-menu.open{display:flex}
+.hd-menu a{display:flex;align-items:center;gap:11px;padding:15px 24px;font-family:"JetBrains Mono",monospace;font-size:13.5px;color:var(--muted);border-bottom:1px solid var(--line);transition:color .15s,background-color .15s}
+.hd-menu a:last-child{border-bottom:0}
+.hd-menu a:hover{color:var(--fg);background:var(--panel)}
+.hd-menu a .hm-dot{width:5px;height:5px;border-radius:50%;background:var(--faint);flex:0 0 auto;transition:background .15s}
+.hd-menu a:hover .hm-dot{background:var(--paint)}
+.hd-menu a.on{color:var(--paint)}
+.hd-menu a.on .hm-dot{background:var(--paint)}
+@media(min-width:821px){.hd-menu{display:none!important}}
+@media(max-width:820px){.hd nav.hd-nav{display:none}.burger{display:flex}}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding:14px 0 0}
@@ -102,7 +119,10 @@ img{max-width:100%}
 .demo svg{display:block;width:100%}
 
 /* ---------- section + module cards ---------- */
-.section-pad{padding:76px 0}
+/* vertical only — must NOT reset .wrap's horizontal padding (equal specificity,
+   declared later would win and zero the mobile side gutter) */
+.section-pad{padding-top:76px;padding-bottom:76px}
+@media(max-width:560px){.section-pad{padding-top:44px;padding-bottom:44px}}
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px;gap:24px}
 .sec-k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;color:var(--paint);margin-bottom:10px}
 .sec-head h2{font-weight:900;letter-spacing:-.02em;font-size:clamp(1.6rem,3vw,2.4rem)}

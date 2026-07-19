@@ -17,7 +17,7 @@ const nav = [
       <img src="/logo-lockup.svg" alt="ABR | MOVE" />
     </a>
 
-    <nav>
+    <nav class="hd-nav">
       {nav.map((l) => (
         <a href={l.href} class={active === l.key ? 'on' : ''}>{l.label}</a>
       ))}
@@ -28,6 +28,32 @@ const nav = [
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a.5.5 0 0 0-.65-.6A9 9 0 1 0 21.1 15.15a.5.5 0 0 0-.6-.65z"/></svg>
       </button>
+      <button class="burger" id="nav-burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="hd-menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
+
+  <nav class="hd-menu" id="hd-menu" aria-label="Меню">
+    {nav.map((l) => (
+      <a href={l.href} class={active === l.key ? 'on' : ''}><span class="hm-dot"></span>{l.label}</a>
+    ))}
+  </nav>
 </header>
+
+<script>
+  (function () {
+    const burger = document.getElementById('nav-burger');
+    const menu = document.getElementById('hd-menu');
+    if (!burger || !menu) return;
+    const close = () => { menu.classList.remove('open'); burger.classList.remove('on'); burger.setAttribute('aria-expanded', 'false'); };
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.classList.toggle('on', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 820) close(); });
+  })();
+</script>
