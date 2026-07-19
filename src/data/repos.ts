@@ -6,6 +6,8 @@ export const MODULE_REPOS: Record<string, string> = {
   'cursor-sync': 'cursorsync',
   'road-style': 'RoadStyle',
   'model-desk': 'ModelDesk',
+  'pave-plan': 'PavePlan',
+  'abr-theme': 'AbrTheme',
 };
 
 // .tpm filename prefix per module slug, matching AbrModules/robur-modules catalog.json
@@ -16,4 +18,6 @@ export const MODULE_TPM_PREFIX: Record<string, string> = {
   'cursor-sync': 'CursorSync',
   'road-style': 'RoadStyle',
   'model-desk': 'ModelDesk',
+  'pave-plan': 'PavePlan',
+  'abr-theme': 'AbrTheme',
 };
