@@ -20,6 +20,7 @@ export interface ModuleDoc {
   flagship?: boolean;
   popular?: boolean;       // shown in the homepage top-3 plugins table
   hit?: boolean;           // renders a "ХИТ" badge in the plugins table
+  isNew?: boolean;         // renders a "НОВЫЙ" badge in the modules catalog
   download?: string;       // direct .tpm release URL (GitHub releases)
   screenshot?: string;     // /public path, optional
   gif?: string;            // /public path, optional
@@ -233,6 +234,7 @@ export const modules: ModuleDoc[] = [
   },
   {
     slug: 'pave-plan',
+    isNew: true,
     title: 'Мощение',
     version: '1.0.0',
     compat: [ROBUR_ALL],
@@ -266,6 +268,7 @@ export const modules: ModuleDoc[] = [
   },
   {
     slug: 'abr-theme',
+    isNew: true,
     title: 'Диспетчер тем',
     version: '1.0.0',
     compat: [ROBUR_ALL],
