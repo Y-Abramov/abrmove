@@ -5,20 +5,26 @@
 import { MODULE_REPOS } from '../data/repos';
 import { getYandexModuleTotal } from '../data/counters';
 const repos = Object.values(MODULE_REPOS);
+const ghHeaders: Record<string, string> = {
+  Accept: 'application/vnd.github+json',
+  'User-Agent': 'abr-move-site',
+};
+// Authenticated requests get 5000/hr instead of 60/hr shared across all
+// GitHub-hosted runners — unauthenticated calls were flaky-404ing the whole
+// counter on scheduled rebuilds. Token is build-time only, never reaches the client.
+const ghToken = import.meta.env.GH_TOKEN;
+if (ghToken) ghHeaders.Authorization = `Bearer ${ghToken}`;
+
 let downloads = 0;
-try {
-  const lists = await Promise.all(
-    repos.map((r) =>
-      fetch(`https://api.github.com/repos/Y-Abramov/${r}/releases`, {
-        headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'abr-move-site' },
-      }).then((res) => (res.ok ? res.json() : []))
-    )
-  );
-  for (const rel of lists.flat()) {
-    for (const a of rel?.assets ?? []) downloads += a.download_count ?? 0;
-  }
-} catch {
-  downloads = 0;
+const lists = await Promise.all(
+  repos.map((r) =>
+    fetch(`https://api.github.com/repos/Y-Abramov/${r}/releases`, { headers: ghHeaders })
+      .then((res) => (res.ok ? res.json() : []))
+      .catch(() => [])
+  )
+);
+for (const rel of lists.flat()) {
+  for (const a of rel?.assets ?? []) downloads += a.download_count ?? 0;
 }
 downloads += await getYandexModuleTotal();
 ---

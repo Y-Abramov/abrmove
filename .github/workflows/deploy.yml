@@ -21,6 +21,9 @@ jobs:
       # it's the public invoke URL) — Settings > Actions > Variables. Unset is fine,
       # downloadHref() falls back to direct links with no count.
       PUBLIC_COUNTER_URL: ${{ vars.PUBLIC_COUNTER_URL }}
+      # Raises the GitHub Releases download-count fetch in Hero.astro from 60/hr
+      # (shared across all Actions runners, easily exhausted) to 5000/hr.
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
